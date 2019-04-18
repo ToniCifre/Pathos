@@ -1,0 +1,62 @@
+<body th:fragment="navBar">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="small-logo" href="#">↥Small Logo</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="active" href="#" th:text="#{navbar.uno}"></a></li>
+                    <li><a href="#" th:text="#{navbar.dos}"></a></li>
+                    <li><a href="#" th:text="#{navbar.tres}"></a></li>
+                    <li><a href="#" th:text="#{navbar.quatre}"></a></li>
+                    <li>
+                    <select class="selectpicker" data-width="fit" id="locales">
+                        <option value="es" data-content='<span class="flag-icon flag-icon-es"></span>'th:text="#{lang.es}"></option>
+                        <option value="en" data-content='<span class="flag-icon flag-icon-us"></span>'th:text="#{lang.es}"></option>
+                    </select>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+<!--
+    <nav class="navbar navbar-expand-md bg-transparent">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button type="button" class="navbar-toggler js-offcanvas-toggler ml-auto" data-button-options='{"wrapText":false}' aria-label="Toggle navigation" style="outline: none;">
+            <i class="material-icons" style="font-size:36px">chevron_left</i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault" data-set="bs">
+            <ul class="navbar-nav mr-auto js-append-around" style="margin: auto;">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" th:text="#{navbar.uno}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login" th:text="#{navbar.dos}"></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" th:text="#{navbar.tres}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:text="#{navbar.quatre}"></a>
+                </li>
+
+
+
+            </ul>
+        </div>
+    </nav>-->
+</body>
