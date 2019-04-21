@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -43,28 +42,27 @@ public class LoginController {
         if (userExists != null) {
             bindingResult
                     .rejectValue("email", "error.user",
-                            "There is already a user registered with the email provided");
+                            "Ja hi ha un usuari amb aquest email");
         }
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registration");
         } else {
             userService.saveUser(user);
-            modelAndView.addObject("successMessage", "User has been registered successfully");
+            modelAndView.addObject("successMessage", "Usuari registrat amb exit");
             modelAndView.addObject("user", new User());
-            modelAndView.setViewName("admin/pathos");
-
+            modelAndView.setViewName("org/home");
         }
         return modelAndView;
     }
 
-//    @RequestMapping(value="/admin/home", method = RequestMethod.GET)
+//    @RequestMapping(value="/org/home", method = RequestMethod.GET)
 //    public ModelAndView home(){
 //        ModelAndView modelAndView = new ModelAndView();
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        User user = userService.findUserByEmail(auth.getName());
 //        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
 //        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-//        modelAndView.setViewName("admin/home");
+//        modelAndView.setViewName("org/home");
 //        return modelAndView;
 //    }
 

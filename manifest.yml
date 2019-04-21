@@ -1,0 +1,10 @@
+---
+# this manifest deploys two apps
+# apps are in flame and spark directories
+# flame and spark are in fireplace
+# cf push should be run from fireplace
+applications:
+  - name: pathos
+    domain: cfapps.io
+    path: target/pathos.war
+    host: toni

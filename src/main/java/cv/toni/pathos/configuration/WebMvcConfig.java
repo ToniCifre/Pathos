@@ -23,17 +23,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/homr").setViewName("homr");
+        registry.addViewController("/").setViewName("homr");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**", "/css/**", "/js/**")
+        registry.addResourceHandler("/img/**", "/css/**", "/js/**", "/vendor/**")
                 .addResourceLocations(
-                        "classpath:/static/images/",
+                        "classpath:/static/img/",
                         "classpath:/static/css/",
-                        "classpath:/static/js/");
+                        "classpath:/static/js/",
+                        "classpath:/static/vendor/");
     }
 
 

@@ -46,10 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/vendor/fontawesome-free/css/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/registration").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
+                .antMatchers("/org/**").hasAnyAuthority("ORG","ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin()
                 .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/admin/pathos")
+                .defaultSuccessUrl("/org/home")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()
@@ -61,8 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
+        web.ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**",
                         "/vendor/**", "/vendor/fontawesome-free/css/**");
     }
