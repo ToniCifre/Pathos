@@ -1,9 +1,5 @@
 package cv.toni.pathos.controller;
 
-import cv.toni.pathos.model.User;
-import cv.toni.pathos.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,14 +11,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value={"/org/home", "/org/"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/org/home", "/org"}, method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated() && auth.getAuthorities().stream().anyMatch(r ->
                 r.getAuthority().equals("ORG") || r.getAuthority().equals("ADMIN") )) {
-            modelAndView.addObject("userName", auth.getName());
+            modelAndView.addObject("userName", "-"+auth.getName()+"-");
             modelAndView.setViewName("org/home.html");
         }else{
             modelAndView.setViewName("access-denied");

@@ -47,8 +47,14 @@
                                         </div>
                                     </div>
 
+                                    <div align="center" th:if="${param.errorLog}">
+                                        <p style="font-size: 20; color: #FF1C19;">Email or Password invalid</p>
+                                    </div>
+                                    <div align="center" th:if="${param.errorAct}">
+                                        <p style="font-size: 20; color: #FF1C19;">La cuenta no esta vecificada</p>
+                                    </div>
                                     <div align="center" th:if="${param.error}">
-                                        <p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+                                        <p style="font-size: 20; color: #FF1C19;">Email or Password invalid, 3</p>
                                     </div>
 
                                     <button class="btn btn-primary btn-user btn-block" name="Submit" value="Login" type="Submit" th:text="Login"></button>
