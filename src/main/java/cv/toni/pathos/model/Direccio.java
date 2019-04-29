@@ -27,7 +27,7 @@ public class Direccio {
     @NotEmpty(message = "La direccio es necessaria")
     private String carrer;
 
-    @Column(name = "num")
+    @Column(name = "direcció")
     private int num;
 
     @Column(name = "pis", unique = true)
@@ -39,11 +39,10 @@ public class Direccio {
     private String porta;
 
     @Column(name = "cp")
-    @Length(min = 4, message = "Min Length is 4")
+    @Length(min = 5, max = 5, message = "Length must be 5")
     private int cp;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "direccio_user", joinColumns = @JoinColumn(name = "direccio_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
-
 }

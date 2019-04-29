@@ -45,12 +45,16 @@ public class User {
     @Column(name = "active")
     private int active;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Role role;
 
     @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private Set<Direccio> direccions;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "colaboradors", joinColumns = @JoinColumn(name = "direccio_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> users;
 
     public String getEmail() {
         return email;
