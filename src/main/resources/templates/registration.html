@@ -57,7 +57,7 @@
                                 <input type="password" th:field="*{password}" class="form-control form-control-user" placeholder="Password">
                                 <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
                             </div>
-
+                            <label th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="validation-message"></label>
                             <button type="submit" class="btn btn-primary btn-user btn-block">Register Account</button>
                         </form>
                         <hr>

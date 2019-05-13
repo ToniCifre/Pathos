@@ -1,5 +1,6 @@
 package cv.toni.pathos.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,18 +12,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-    @RequestMapping(value={"/org/home", "/org"}, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ORG')")
+    @RequestMapping(value={"/","/home"}, method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.isAuthenticated() && auth.getAuthorities().stream().anyMatch(r ->
-                r.getAuthority().equals("ORG") || r.getAuthority().equals("ADMIN") )) {
-            modelAndView.addObject("userName", "-"+auth.getName()+"-");
-            modelAndView.setViewName("org/home.html");
-        }else{
-            modelAndView.setViewName("access-denied");
-        }
+        modelAndView.addObject("userName", auth.getName());
+
+        modelAndView.addObject("fragmentName", "home");
+
+        modelAndView.setViewName("home.html");
 
         return modelAndView;
     }

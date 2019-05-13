@@ -17,7 +17,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
@@ -44,14 +44,20 @@ public class LoginController {
                     .rejectValue("email", "error.user",
                             "Ja hi ha un usuari amb aquest email");
         }
-
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("registration");
-        } else {
-            userService.saveUser(user);
-
-            modelAndView.setViewName("redirect:/org/home");
         }
+
+        if(userService.createUser(user,"ORG") == null){
+            bindingResult
+                    .rejectValue("id", "error.user",
+                            "No sha pogut crear l'usuari");
+            modelAndView.setViewName("registration");
+        }else{
+            modelAndView.setViewName("redirect:/login");
+        }
+
+
         return modelAndView;
     }
 }

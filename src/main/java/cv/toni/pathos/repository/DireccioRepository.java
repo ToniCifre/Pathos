@@ -9,6 +9,5 @@ import java.util.List;
 @Repository("direccioRepository")
 public interface DireccioRepository extends JpaRepository<Direccio, Long> {
 
-    Direccio findByCp(int cp);
-    List<Direccio> findAllByCarrerAndNum(String carrer, int num);
+    Direccio findById(int id);
 }
