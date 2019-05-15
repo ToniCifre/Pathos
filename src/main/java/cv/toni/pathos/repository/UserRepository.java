@@ -1,5 +1,6 @@
 package cv.toni.pathos.repository;
 
+import cv.toni.pathos.model.Direccio;
 import cv.toni.pathos.model.Role;
 import cv.toni.pathos.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

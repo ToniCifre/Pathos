@@ -32,44 +32,63 @@
     </div>
 
     <form class="user" th:action="@{/createNotify}" th:object="${notify}" method="POST">
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="nom">First name</label>
-                <input type="text" class="form-control" th:field="*{nom}" id="nom" placeholder="First name" required>
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <label for="titol" class="col-sm-2 col-form-label">Titol</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="titol" placeholder="Informació general">
+                </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="descripcio">Last name</label>
-                <input type="text" class="form-control" th:field="*{descripcio}" id="descripcio" placeholder="Last name" required>
+            <div class="col-lg-6 mb-3 custom-checkbox row">
+                <label for="titol" class="col-sm-2 col-form-label">Direcció</label>
+                <div class="col-sm-10">
+                    <select class="custom-select">
+                        <option selected>Selecciona la direcció</option>
+                        <div th:each="direc,iter: ${listDire}">
+                            <option th:value="${iter.index}" th:text="${direc}"></option>
+                        </div>
+                    </select>
+                    <label th:if="${#lists.size(listDire) == 0}" for="titol" class="col-form-label text-danger">No tens cap direcció guardada</label>
+                </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <label for="descripcio">Last name</label>
-                <input type="text" class="form-control" th:field="*{descripcio}" id="descripcio" placeholder="Last name" required>
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10 custom-checkbox" style = "padding-left: 2.5rem;">
+                    <input type="checkbox" class="custom-control-input" id="isAliment">
+                    <label class="custom-control-label" for="isAliment">Es un producte alimentici</label>
+                </div>
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-6 mb-3">
-                <label for="validationDefault03">City</label>
-                <input type="text" class="form-control" id="validationDefault03" placeholder="City" required>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="validationDefault04">State</label>
-                <input type="text" class="form-control" id="validationDefault04" placeholder="State" required>
-            </div>
-            <div class="col-md-3 mb-3">
-                <label for="validationDefault05">Zip</label>
-                <input type="text" class="form-control" id="validationDefault05" placeholder="Zip" required>
+        <div class="form-group row isProduct" style="display: none;">
+            <label for="caducitat" class="col-lg-1 col-sm-2 col-form-label">Expiració</label>
+            <div class="col-sm-7 col-md-4">
+                <input type="number" class="form-control" id="caducitat" placeholder="Dies per a l'expiració">
             </div>
         </div>
-        <div class="form-group">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-                <label class="form-check-label" for="invalidCheck2">
-                    Agree to terms and conditions
-                </label>
+
+        <div class="form-group row">
+            <label for="descripcio" class="col-lg-1 col-sm-2 col-form-label">Descripció</label>
+            <div class="col-sm-10 mb-3">
+                <textarea type="text" class="form-control" id="descripcio" placeholder="Descripció mes explicativa i informació extra"></textarea>
             </div>
         </div>
-        <button class="btn btn-primary" type="submit">Submit form</button>
+        <input type="text" value="id_reciver" style="display: none">
+        <button class="btn btn-primary" type="submit">Enviar notificació</button>
     </form>
+
+    <script>
+        $('#isAliment').change(function() {
+            if($(this).is(":checked")) {
+                $('.isProduct').fadeIn('slow');
+                return;
+            }
+            $('.isProduct').fadeOut('slow');
+        });
+    </script>
     <!-- /.container-fluid -->
 </div>
 </body>

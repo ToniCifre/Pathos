@@ -88,4 +88,9 @@ public class Direccio {
     public void setCp(int cp) {
         this.cp = cp;
     }
+
+    @Override
+    public String toString() {
+        return carrer+", "+num;
+    }
 }

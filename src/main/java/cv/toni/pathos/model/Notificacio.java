@@ -22,10 +22,10 @@ public class Notificacio {
     @Column(name = "notifi_id")
     private int id;
 
-    @Column(name = "nom")
+    @Column(name = "titol")
     @NotEmpty(message = "En nom es necesari")
     @NotNull
-    private String nom;
+    private String titol;
 
     @Column(name = "descripcio")
     @NotEmpty(message = "La direccio es necessaria")
@@ -54,23 +54,20 @@ public class Notificacio {
     @NotNull
     private User receptor;
 
-    private int receptorId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false, name = "direccio_id")
+    @NotNull
+    private Direccio direccio;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) { this.id = id; }
 
-    public String getNom() {
-        return nom;
-    }
+    public String getTitol() { return titol; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public void setTitol(String titol) { this.titol = titol; }
 
     public String getDescripcio() {
         return descripcio;
@@ -120,11 +117,5 @@ public class Notificacio {
         this.receptor = receptor;
     }
 
-    public int getReceptorId() {
-        return receptorId;
-    }
 
-    public void setReceptorId(int receptorId) {
-        this.receptorId = receptorId;
-    }
 }

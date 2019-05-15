@@ -13,10 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("userService")
 public class UserService {
@@ -69,5 +67,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<String> getUserDirection(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByEmail(auth.getName());
+        return user.getDireccions().stream().map(Direccio::toString).collect(Collectors.toList());
+    }
 
 }
