@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -22,23 +24,13 @@ public class Direccio {
     @Column(name = "direccio_id")
     private int id;
 
-    @Column(name = "carrer", unique = true)
+    @Column(name = "dir")
     @NotEmpty(message = "La direccio es necessaria")
-    private String carrer;
+    private String dir;
 
-    @Column(name = "direcció")
-    private int num;
-
-    @Column(name = "pis", unique = true)
-    @Length(max = 8, message = "Max Length is 8")
-    private String pis;
-
-    @Column(name = "porta", unique = true)
-    @Length(max = 8, message = "Max Length is 8")
-    private String porta;
-
-    @Column(name = "cp")
-    @Length(min = 5, max = 5, message = "Length must be 5")
+    @Column(name = "cp", nullable = false)
+    @Range(min = 1, max = 99999, message = "El rang del codi postal es entre 0 i 99999")
+    @NotNull(message = "La codi postal es necessari")
     private int cp;
 
     public int getId() {
@@ -49,36 +41,12 @@ public class Direccio {
         this.id = id;
     }
 
-    public String getCarrer() {
-        return carrer;
+    public String getDireccio() {
+        return dir;
     }
 
-    public void setCarrer(String carrer) {
-        this.carrer = carrer;
-    }
-
-    public int getNum() {
-        return num;
-    }
-
-    public void setNum(int num) {
-        this.num = num;
-    }
-
-    public String getPis() {
-        return pis;
-    }
-
-    public void setPis(String pis) {
-        this.pis = pis;
-    }
-
-    public String getPorta() {
-        return porta;
-    }
-
-    public void setPorta(String porta) {
-        this.porta = porta;
+    public void setDireccio(String direccio) {
+        this.dir = direccio;
     }
 
     public int getCp() {
@@ -89,8 +57,4 @@ public class Direccio {
         this.cp = cp;
     }
 
-    @Override
-    public String toString() {
-        return carrer+", "+num;
-    }
 }

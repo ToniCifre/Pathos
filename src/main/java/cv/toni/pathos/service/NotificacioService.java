@@ -2,6 +2,7 @@ package cv.toni.pathos.service;
 
 import cv.toni.pathos.model.Notificacio;
 import cv.toni.pathos.model.User;
+import cv.toni.pathos.repository.DireccioRepository;
 import cv.toni.pathos.repository.NotificacioRepository;
 import cv.toni.pathos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,15 @@ public class NotificacioService {
 
     private NotificacioRepository notificacioRepository;
     private UserRepository userRepository;
+    private DireccioRepository direccioRepository;
 
     @Autowired
     public NotificacioService(@Qualifier("notificacioRepository") NotificacioRepository notificacioRepository,
-                              @Qualifier("userRepository") UserRepository userRepository) {
+                              @Qualifier("userRepository") UserRepository userRepository,
+                              @Qualifier("direccioRepository") DireccioRepository direccioRepository) {
         this.notificacioRepository = notificacioRepository;
         this.userRepository = userRepository;
+        this.direccioRepository = direccioRepository;
     }
 
     public List<Notificacio> findNotificaciosByReceptorId(int idR){
@@ -43,14 +47,14 @@ public class NotificacioService {
     }
 
     public Notificacio createNotificacio(Notificacio n, int receptorId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        n.setEmisor(user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        n.setEmisor(userRepository.findUserByEmail(auth.getName()));
 
         n.setData(LocalDateTime.now());
 
-        user = userRepository.findUserById(receptorId);
-        n.setReceptor(user);
+        n.setReceptor(userRepository.findUserById(receptorId));
+
+        n.setDireccio(direccioRepository.findById(n.getId_direccio()));
 
         return notificacioRepository.save(n);
     }

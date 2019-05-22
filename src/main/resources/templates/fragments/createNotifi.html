@@ -31,23 +31,25 @@
         <h1 class="h3 mb-0 text-gray-800">Enviar Una Notificació</h1>
     </div>
 
-    <form class="user" th:action="@{/createNotify}" th:object="${notify}" method="POST">
+    <form class="user" th:action="@{/enviar_notificacio(org-id=${org})}" th:object="${notify}" method="POST">
         <div class="form-group row">
             <div class="col-lg-6 mb-3 row">
                 <label for="titol" class="col-sm-2 col-form-label">Titol</label>
                 <div class="col-sm-10">
-                    <input type="email" class="form-control" id="titol" placeholder="Informació general">
+                    <input th:field="*{titol}" type="text" class="form-control" id="titol" placeholder="Informació general">
+                    <label th:if="${#fields.hasErrors('titol')}" th:errors="*{titol}" class="validation-message"></label>
                 </div>
             </div>
             <div class="col-lg-6 mb-3 custom-checkbox row">
                 <label for="titol" class="col-sm-2 col-form-label">Direcció</label>
                 <div class="col-sm-10">
-                    <select class="custom-select">
-                        <option selected>Selecciona la direcció</option>
-                        <div th:each="direc,iter: ${listDire}">
-                            <option th:value="${iter.index}" th:text="${direc}"></option>
+                    <select th:field="*{id_direccio}" class="custom-select">
+                        <option value=0 selected>Selecciona la direcció</option>
+                        <div th:each="direc: ${listDire}">
+                            <option th:value="${direc.id}" th:text="${direc.direccio}"></option>
                         </div>
                     </select>
+                    <label th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="text-danger validation-message"></label>
                     <label th:if="${#lists.size(listDire) == 0}" for="titol" class="col-form-label text-danger">No tens cap direcció guardada</label>
                 </div>
             </div>
@@ -58,22 +60,25 @@
             <div class="col-lg-6 mb-3 row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10 custom-checkbox" style = "padding-left: 2.5rem;">
-                    <input type="checkbox" class="custom-control-input" id="isAliment">
+                    <input th:field="*{product}" type="checkbox" class="custom-control-input" id="isAliment">
                     <label class="custom-control-label" for="isAliment">Es un producte alimentici</label>
+                    <label th:if="${#fields.hasErrors('product')}" th:errors="*{product}" class="text-danger validation-message"></label>
                 </div>
             </div>
         </div>
         <div class="form-group row isProduct" style="display: none;">
             <label for="caducitat" class="col-lg-1 col-sm-2 col-form-label">Expiració</label>
             <div class="col-sm-7 col-md-4">
-                <input type="number" class="form-control" id="caducitat" placeholder="Dies per a l'expiració">
+                <input th:field="*{caducitat}" type="number" class="form-control" id="caducitat" placeholder="Dies per a l'expiració">
             </div>
+            <label th:if="${#fields.hasErrors('caducitat')}" th:errors="*{caducitat}"class="validation-message"></label>
         </div>
 
         <div class="form-group row">
             <label for="descripcio" class="col-lg-1 col-sm-2 col-form-label">Descripció</label>
             <div class="col-sm-10 mb-3">
-                <textarea type="text" class="form-control" id="descripcio" placeholder="Descripció mes explicativa i informació extra"></textarea>
+                <textarea th:field="*{descripcio}" type="text" class="form-control" id="descripcio" placeholder="Descripció mes explicativa i informació extra"></textarea>
+                <label th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"class="validation-message"></label>
             </div>
         </div>
         <input type="text" value="id_reciver" style="display: none">

@@ -38,26 +38,15 @@ public class LoginController {
     public ModelAndView registration(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         User userExists = userService.findUserByEmail(user.getEmail());
-
         if (userExists != null) {
-            bindingResult
-                    .rejectValue("email", "error.user",
-                            "Ja hi ha un usuari amb aquest email");
-        }
-        if (bindingResult.hasErrors()) {
+            bindingResult.rejectValue("email", "error.user", "Ja hi ha un usuari amb aquest email");
             modelAndView.setViewName("registration");
-        }
-
-        if(userService.createUser(user,"ORG") == null){
-            bindingResult
-                    .rejectValue("id", "error.user",
-                            "No sha pogut crear l'usuari");
+        }else if(userService.createUser(user,"ORG") == null){
+            bindingResult.rejectValue("id", "error.user", "No sha pogut crear l'usuari");
             modelAndView.setViewName("registration");
         }else{
             modelAndView.setViewName("redirect:/login");
         }
-
-
         return modelAndView;
     }
 }

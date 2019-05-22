@@ -33,31 +33,29 @@ public class Notificacio {
     private String descripcio;
 
     @Column(name = "product")
-    @NotNull
     private Boolean product;
 
     @Column(name = "data")
-    @NotNull
     private LocalDateTime data;
 
     @Column(name = "caducitat")
-    @NotNull
     private int caducitat;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "emisor_id")
-    @NotNull
     private User emisor;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "receptor_id")
-    @NotNull
     private User receptor;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "direccio_id")
-    @NotNull
     private Direccio direccio;
+
+    @Transient
+    @NotNull
+    private int id_direccio;
 
     public int getId() {
         return id;
@@ -117,5 +115,15 @@ public class Notificacio {
         this.receptor = receptor;
     }
 
+    public Direccio getDireccio() {
+        return direccio;
+    }
 
+    public void setDireccio(Direccio direccio) {
+        this.direccio = direccio;
+    }
+
+    public int getId_direccio() {
+        return id_direccio;
+    }
 }

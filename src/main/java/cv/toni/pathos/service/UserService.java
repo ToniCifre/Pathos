@@ -59,6 +59,7 @@ public class UserService {
     }
 
     public User addDirection(Direccio d){
+        System.out.println(d);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByEmail(auth.getName());
         Set<Direccio> aux = user.getDireccions();
@@ -67,10 +68,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<String> getUserDirection(){
+    public List<Direccio> getUserDirection(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findUserByEmail(auth.getName());
-        return user.getDireccions().stream().map(Direccio::toString).collect(Collectors.toList());
+        return new ArrayList<>(user.getDireccions());
     }
 
 }
