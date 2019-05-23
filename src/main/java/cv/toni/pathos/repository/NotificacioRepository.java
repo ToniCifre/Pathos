@@ -16,4 +16,6 @@ public interface NotificacioRepository extends JpaRepository<Notificacio, Long> 
 
     List<Notificacio> findNotificaciosByReceptor_Email(String email);
     List<Notificacio> findNotificaciosByEmisor(User e);
+
+    Notificacio findNotificaciosById(int id);
 }

@@ -43,8 +43,8 @@ public class UserService {
 
     public User createUser(User user, String Role) {
         try{
-
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
             user.setActive(1);
 
             Role userRole = roleRepository.findByRole(Role);

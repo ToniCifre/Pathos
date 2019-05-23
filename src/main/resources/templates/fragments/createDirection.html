@@ -37,7 +37,7 @@
                 <label for="dir" class="col-sm-2 col-form-label">Titol</label>
                 <div class="col-sm-10">
                     <input th:field="*{dir}" type="text" class="form-control" id="dir" placeholder="C/ Sant pau 119, pral 2">
-                    <label th:if="${#fields.hasErrors('dir')}" th:errors="*{dir}"class="validation-message"></label>
+                    <label th:if="${#fields.hasErrors('dir')}" th:errors="*{dir}"class="text-danger"></label>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             <label for="cp" class="col-lg-1 col-sm-2 col-form-label">Codi postal</label>
             <div class="col-sm-7 col-md-4">
                 <input th:field="*{cp}" type="number" class="form-control" id="cp" placeholder="Ex: 08001">
-                <label th:if="${#fields.hasErrors('cp')}" th:errors="*{cp}"class="validation-message"></label>
+                <label th:if="${#fields.hasErrors('cp')}" th:errors="*{cp}"class="text-danger"></label>
             </div>
         </div>
 

@@ -37,15 +37,36 @@ public class LoginController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public ModelAndView registration(@Valid User user, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        User userExists = userService.findUserByEmail(user.getEmail());
-        if (userExists != null) {
-            bindingResult.rejectValue("email", "error.user", "Ja hi ha un usuari amb aquest email");
-            modelAndView.setViewName("registration");
-        }else if(userService.createUser(user,"ORG") == null){
-            bindingResult.rejectValue("id", "error.user", "No sha pogut crear l'usuari");
-            modelAndView.setViewName("registration");
-        }else{
-            modelAndView.setViewName("redirect:/login");
+        modelAndView.setViewName("registration");
+
+        if(bindingResult.hasFieldErrors()){
+            return modelAndView;
+        } else {
+            if (user.getEmail().length() > 50) {
+                bindingResult.rejectValue("email", "error.user",
+                        "El email com a maxim ha de ser de 50 caracters");
+            }
+            if (user.getName().length() > 15) {
+                bindingResult.rejectValue("name", "error.name",
+                        "El nom com a maxim ha de ser de 15 caracters");
+            }
+            if (bindingResult.hasFieldErrors()) { return modelAndView; }
+
+            User emailExists = userService.findUserByName(user.getName());
+            User nameExists = userService.findUserByEmail(user.getEmail());
+            if (emailExists != null) {
+                bindingResult.rejectValue("email", "error.user", "Ja hi ha un usuari amb aquest email");
+            }
+            if (nameExists != null) {
+                bindingResult.rejectValue("name", "error.user", "Ja hi ha un usuari amb aquest nom");
+            }
+            if (bindingResult.hasFieldErrors()) { return modelAndView; }
+
+            else if (userService.createUser(user, "ORG") == null) {
+                bindingResult.rejectValue("id", "error.user", "No sha pogut crear l'usuari");
+            } else {
+                modelAndView.setViewName("redirect:/login");
+            }
         }
         return modelAndView;
     }

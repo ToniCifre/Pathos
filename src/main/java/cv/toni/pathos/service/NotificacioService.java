@@ -1,6 +1,7 @@
 package cv.toni.pathos.service;
 
 import cv.toni.pathos.model.Notificacio;
+import cv.toni.pathos.model.NotifyStat;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.repository.DireccioRepository;
 import cv.toni.pathos.repository.NotificacioRepository;
@@ -46,18 +47,27 @@ public class NotificacioService {
         return notificacioRepository.findNotificaciosByEmisor(user);
     }
 
+    public Notificacio findNotificaciosById(int id){return notificacioRepository.findNotificaciosById(id);}
+
     public Notificacio createNotificacio(Notificacio n, int receptorId){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         n.setEmisor(userRepository.findUserByEmail(auth.getName()));
-
-        n.setData(LocalDateTime.now());
 
         n.setReceptor(userRepository.findUserById(receptorId));
 
         n.setDireccio(direccioRepository.findById(n.getId_direccio()));
 
+        n.setData(LocalDateTime.now());
+
+        n.setEstat(NotifyStat.PENDENT);
+
         return notificacioRepository.save(n);
     }
 
+    public Notificacio setEstat(String estat, int id){
+        Notificacio n = findNotificaciosById(id);
+        n.setEstat(NotifyStat.valueOf(estat));
+        return notificacioRepository.save(n);
+    }
 
 }

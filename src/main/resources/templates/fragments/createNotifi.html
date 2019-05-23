@@ -22,7 +22,8 @@
 
 <!-- Begin Page Content -->
 <div th:fragment="f-createNotifi" class="container-fluid">
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 
     <!-- Page Heading -->
 
@@ -31,13 +32,13 @@
         <h1 class="h3 mb-0 text-gray-800">Enviar Una Notificació</h1>
     </div>
 
-    <form class="user" th:action="@{/enviar_notificacio(org-id=${org})}" th:object="${notify}" method="POST">
+    <form class="user" th:action="@{/enviar_notificacio/} + ${org}" th:object="${notify}" method="POST">
         <div class="form-group row">
             <div class="col-lg-6 mb-3 row">
                 <label for="titol" class="col-sm-2 col-form-label">Titol</label>
                 <div class="col-sm-10">
                     <input th:field="*{titol}" type="text" class="form-control" id="titol" placeholder="Informació general">
-                    <label th:if="${#fields.hasErrors('titol')}" th:errors="*{titol}" class="validation-message"></label>
+                    <label th:if="${#fields.hasErrors('titol')}" th:errors="*{titol}" class="text-danger"></label>
                 </div>
             </div>
             <div class="col-lg-6 mb-3 custom-checkbox row">
@@ -49,7 +50,7 @@
                             <option th:value="${direc.id}" th:text="${direc.direccio}"></option>
                         </div>
                     </select>
-                    <label th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="text-danger validation-message"></label>
+                    <label th:if="${#fields.hasErrors('direccio')}" th:errors="*{direccio}" class="text-danger text-danger"></label>
                     <label th:if="${#lists.size(listDire) == 0}" for="titol" class="col-form-label text-danger">No tens cap direcció guardada</label>
                 </div>
             </div>
@@ -60,25 +61,25 @@
             <div class="col-lg-6 mb-3 row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10 custom-checkbox" style = "padding-left: 2.5rem;">
-                    <input th:field="*{product}" type="checkbox" class="custom-control-input" id="isAliment">
+                    <input th:field="*{isProduct}" type="checkbox" class="custom-control-input" id="isAliment">
                     <label class="custom-control-label" for="isAliment">Es un producte alimentici</label>
-                    <label th:if="${#fields.hasErrors('product')}" th:errors="*{product}" class="text-danger validation-message"></label>
+                    <label th:if="${#fields.hasErrors('isProduct')}" th:errors="*{isProduct}" class="text-danger text-danger"></label>
                 </div>
             </div>
         </div>
         <div class="form-group row isProduct" style="display: none;">
-            <label for="caducitat" class="col-lg-1 col-sm-2 col-form-label">Expiració</label>
+            <label for="caducitat" class="col-lg-1 col-sm-2 col-form-label">Data d'expiració</label>
             <div class="col-sm-7 col-md-4">
-                <input th:field="*{caducitat}" type="number" class="form-control" id="caducitat" placeholder="Dies per a l'expiració">
+                <input th:field="*{caducitat}" class="form-control" id="caducitat" placeholder="MM/DD/YYY" type="text"/>
             </div>
-            <label th:if="${#fields.hasErrors('caducitat')}" th:errors="*{caducitat}"class="validation-message"></label>
+            <label th:if="${#fields.hasErrors('caducitat')}" th:errors="*{caducitat}"class="text-danger"></label>
         </div>
 
         <div class="form-group row">
             <label for="descripcio" class="col-lg-1 col-sm-2 col-form-label">Descripció</label>
             <div class="col-sm-10 mb-3">
                 <textarea th:field="*{descripcio}" type="text" class="form-control" id="descripcio" placeholder="Descripció mes explicativa i informació extra"></textarea>
-                <label th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"class="validation-message"></label>
+                <label th:if="${#fields.hasErrors('descripcio')}" th:errors="*{descripcio}"class="text-danger"></label>
             </div>
         </div>
         <input type="text" value="id_reciver" style="display: none">
@@ -86,6 +87,14 @@
     </form>
 
     <script>
+        var options={
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            language: "ca"
+        };
+        $('#caducitat').datepicker(options);
+
         $('#isAliment').change(function() {
             if($(this).is(":checked")) {
                 $('.isProduct').fadeIn('slow');

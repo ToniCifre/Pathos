@@ -32,14 +32,18 @@ public class Notificacio {
     @NotNull
     private String descripcio;
 
-    @Column(name = "product")
-    private Boolean product;
+    @Column(name = "isProduct")
+    private Boolean isProduct;
 
     @Column(name = "data")
     private LocalDateTime data;
 
     @Column(name = "caducitat")
-    private int caducitat;
+    private String caducitat;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estat", nullable = false, length = 10)
+    public NotifyStat estat;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "emisor_id")
@@ -75,12 +79,12 @@ public class Notificacio {
         this.descripcio = descripcio;
     }
 
-    public Boolean getProduct() {
-        return product;
+    public Boolean isProduct() {
+        return isProduct;
     }
 
-    public void setProduct(Boolean product) {
-        this.product = product;
+    public void setProduct(Boolean isProduct) {
+        this.isProduct = isProduct;
     }
 
     public LocalDateTime getData() {
@@ -89,14 +93,6 @@ public class Notificacio {
 
     public void setData(LocalDateTime data) {
         this.data = data;
-    }
-
-    public int getCaducitat() {
-        return caducitat;
-    }
-
-    public void setCaducitat(int caducitat) {
-        this.caducitat = caducitat;
     }
 
     public User getEmisor() {
@@ -126,4 +122,13 @@ public class Notificacio {
     public int getId_direccio() {
         return id_direccio;
     }
+
+    public String getCaducitat() { return caducitat; }
+
+    public void setCaducitat(String caducitat) { this.caducitat = caducitat; }
+
+    public NotifyStat getEstat() { return estat; }
+
+    public void setEstat(NotifyStat estat) { this.estat = estat; }
 }
+

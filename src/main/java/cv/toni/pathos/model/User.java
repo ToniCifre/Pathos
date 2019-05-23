@@ -5,10 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
@@ -24,37 +22,26 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    @NotNull
+    @Column(name = "user_id", nullable = false, updatable = false,length = 50)
     private int id;
 
-    @Column(name = "email", unique = true, nullable = false)
-    @Email(message = "Please provide a valid Email")
-    @NotEmpty(message = "Please provide an email")
-    @Length(max = 50, message = "El email es demasiado largo")
+    @Column(name = "email", nullable = false, unique = true, length = 51)
+    @NotEmpty(message = "Perfavor, introdueix un email.")
     private String email;
 
-    @Column(name = "password")
-    @Length(min = 5, message = "Your password must have at least 5 characters")
-    @NotEmpty(message = "Please provide your password")
-    @NotNull
+    @Column(name = "password", nullable = false)
+    @NotEmpty(message = "Perfavor, introdueix una contrasenya.")
     private String password;
 
-    @Column(name = "name")
-    @NotEmpty(message = "Please provide your name")
-    @NotNull
+    @Column(name = "name", unique = true, nullable = false, length = 16)
+    @NotEmpty(message = "Perfavor, introdueix un nom.")
     private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "active")
-    @NotNull
+    @Column(name = "active", nullable =  false)
     private int active;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @NotNull
     private Set<Role> roles;
 
     @ManyToMany
@@ -91,14 +78,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public int getActive() {

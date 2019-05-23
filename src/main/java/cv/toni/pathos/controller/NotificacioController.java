@@ -2,6 +2,8 @@ package cv.toni.pathos.controller;
 
 import cv.toni.pathos.model.Direccio;
 import cv.toni.pathos.model.Notificacio;
+import cv.toni.pathos.model.Role;
+import cv.toni.pathos.model.User;
 import cv.toni.pathos.service.NotificacioService;
 import cv.toni.pathos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,8 +46,15 @@ public class NotificacioController {
         return modelAndView;
     }
 
-    @RequestMapping(value={"/enviar_notificacio"}, method = RequestMethod.GET)
-    public ModelAndView createNotification( @RequestParam("org-id") int orgId ){
+    @RequestMapping(value={"/enviar_notificacio/{org-id}"}, method = RequestMethod.GET)
+    public ModelAndView createNotification( @PathVariable("org-id") int orgId){
+        User user = userService.findUserById(orgId);
+        if(user == null){
+            return new ModelAndView("redirect:/");
+        }else if(!user.getRoles().stream().findFirst().get().getRole().equals("ORG")){
+            return new ModelAndView("redirect:/");
+        }
+
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -62,22 +72,14 @@ public class NotificacioController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/enviar_notificacio", method = RequestMethod.POST)
-    public ModelAndView createNotification(@RequestParam("org-id") int orgId, @Valid Notificacio notificacio, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        modelAndView.addObject("userName", auth.getName());
-
+    @RequestMapping(value = "/enviar_notificacio/{org-id}", method = RequestMethod.POST)
+    public ModelAndView createNotification(@PathVariable("org-id") int orgId, @Valid Notificacio notificacio, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("org", orgId);
-            modelAndView.addObject("fragmentName", "createNotify");
-            modelAndView.setViewName("home");
+            return new ModelAndView("redirect:/enviar_notificacio/"+orgId);
         }else{
             notificationService.createNotificacio(notificacio,orgId);
         }
-        modelAndView.addObject("fragmentName", "home");
-        modelAndView.setViewName("home");
+        return new ModelAndView("redirect:/");
 
-        return modelAndView;
     }
 }
