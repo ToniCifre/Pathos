@@ -1,5 +1,6 @@
 package cv.toni.pathos.controller;
 
+import cv.toni.pathos.extra.JavaFaker;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,17 +53,17 @@ public class LoginController {
             }
             if (bindingResult.hasFieldErrors()) { return modelAndView; }
 
-            User emailExists = userService.findUserByName(user.getName());
-            User nameExists = userService.findUserByEmail(user.getEmail());
+            User emailExists = userService.findUserByEmail(user.getEmail());
             if (emailExists != null) {
                 bindingResult.rejectValue("email", "error.user", "Ja hi ha un usuari amb aquest email");
             }
+            User nameExists = userService.findUserByName(user.getName());
             if (nameExists != null) {
                 bindingResult.rejectValue("name", "error.user", "Ja hi ha un usuari amb aquest nom");
             }
             if (bindingResult.hasFieldErrors()) { return modelAndView; }
 
-            else if (userService.createUser(user, "ORG") == null) {
+            else if (userService.createUser(user, "ORG",1) == null) {
                 bindingResult.rejectValue("id", "error.user", "No sha pogut crear l'usuari");
             } else {
                 modelAndView.setViewName("redirect:/login");

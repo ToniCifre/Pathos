@@ -57,6 +57,7 @@
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<version>3.0.4.RELEASE</version>
 		</dependency>
 <!--         https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-->
         <dependency>
@@ -82,8 +83,18 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.15</version>
 		</dependency>
+		<!--                Java Faker              -->
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>0.18</version>
+		</dependency>
 
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>5.1.7.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>

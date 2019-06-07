@@ -1,5 +1,6 @@
 package cv.toni.pathos;
 
+import cv.toni.pathos.extra.JavaFaker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

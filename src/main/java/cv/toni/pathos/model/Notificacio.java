@@ -22,20 +22,18 @@ public class Notificacio {
     @Column(name = "notifi_id")
     private int id;
 
-    @Column(name = "titol")
+    @Column(name = "titol", nullable = false)
     @NotEmpty(message = "En nom es necesari")
-    @NotNull
     private String titol;
 
-    @Column(name = "descripcio")
+    @Column(name = "descripcio", nullable = false, length = 500)
     @NotEmpty(message = "La direccio es necessaria")
-    @NotNull
     private String descripcio;
 
-    @Column(name = "isProduct")
+    @Column(name = "isProduct", nullable = false)
     private Boolean isProduct;
 
-    @Column(name = "data")
+    @Column(name = "data", nullable = false)
     private LocalDateTime data;
 
     @Column(name = "caducitat")
@@ -43,7 +41,7 @@ public class Notificacio {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estat", nullable = false, length = 10)
-    public NotifyStat estat;
+    private NotifyStat estat;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "emisor_id")
@@ -58,7 +56,7 @@ public class Notificacio {
     private Direccio direccio;
 
     @Transient
-    @NotNull
+    @NotNull(message = "has d'escollir una direcció")
     private int id_direccio;
 
     public int getId() {

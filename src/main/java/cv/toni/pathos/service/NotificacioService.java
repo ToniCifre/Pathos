@@ -31,20 +31,14 @@ public class NotificacioService {
         this.direccioRepository = direccioRepository;
     }
 
-    public List<Notificacio> findNotificaciosByReceptorId(int idR){
-        return notificacioRepository.findNotificaciosByReceptorId(idR);
+    public List<Notificacio> getRecivedNotifications(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return notificacioRepository.findAllByReceptor_EmailOrderByDataDesc(auth.getName());
     }
-    public List<Notificacio> findNotificaciosByEmisorId(int idE){
-        return notificacioRepository.findNotificaciosByEmisorId(idE);
-    }
-    public List<Notificacio> getReciveNotifications(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return notificacioRepository.findNotificaciosByReceptor_Email(authentication.getName());
-    }
-    public List<Notificacio> getSendedNotifications(User u){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        return notificacioRepository.findNotificaciosByEmisor(user);
+
+    public List<Notificacio> getRecivedNotificationsByEstat(NotifyStat stat){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return notificacioRepository.findAllByReceptor_EmailAndEstatOrderByDataDesc( auth.getName(), stat);
     }
 
     public Notificacio findNotificaciosById(int id){return notificacioRepository.findNotificaciosById(id);}
@@ -70,4 +64,9 @@ public class NotificacioService {
         return notificacioRepository.save(n);
     }
 
+
+
+    public List<Notificacio> saveNotifications(List<Notificacio> n){
+        return notificacioRepository.saveAll(n);
+    }
 }

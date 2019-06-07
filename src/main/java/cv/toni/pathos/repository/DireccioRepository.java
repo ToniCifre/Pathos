@@ -10,4 +10,5 @@ import java.util.List;
 public interface DireccioRepository extends JpaRepository<Direccio, Long> {
 
     Direccio findById(int id);
+    List<Direccio> findDirecciosByUserEmail(String uEmail);
 }

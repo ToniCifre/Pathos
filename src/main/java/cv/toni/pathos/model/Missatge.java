@@ -21,14 +21,17 @@ public class Missatge {
     @Column(name = "msg_id")
     private int id;
 
-    @Column(name = "msg", unique = true)
-    @NotNull
+    @Column(name = "msg")
+    @NotNull(message = "No es pot enviar un misatge buit")
     private String msg;
 
-    @Column(name = "data", unique = true)
+    @Column(name = "data")
     @NotNull
     private LocalDateTime data;
 
+    @Column(name = "llegit")
+    @NotNull
+    private boolean llegit;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "emisor_id")
@@ -62,6 +65,14 @@ public class Missatge {
 
     public void setData(LocalDateTime data) {
         this.data = data;
+    }
+
+    public boolean isLlegit() {
+        return llegit;
+    }
+
+    public void setLlegit(boolean llegit) {
+        this.llegit = llegit;
     }
 
     public User getEmisor() {

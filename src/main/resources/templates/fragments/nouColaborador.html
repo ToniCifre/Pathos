@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Toni cifre Vicens">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<!-- Begin Page Content -->
+<div th:fragment="f-nouColaborador" class="container-fluid">
+
+
+    <!-- Page Heading -->
+
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Afegir Direcció</h1>
+    </div>
+
+    <form class="user" th:action="@{/nouColaborador}" th:object="${user}" method="POST">
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <label for="nom" class="col-sm-2 col-form-label">Nom</label>
+                <div class="col-sm-10">
+                    <input th:field="*{name}" type="text" class="form-control" id="nom" placeholder="Nom">
+                    <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"class="text-danger"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <label for="email" class="col-sm-2 col-form-label">Nom</label>
+                <div class="col-sm-10">
+                    <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="Email">
+                    <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"class="text-danger"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <label for="password" class="col-sm-2 col-form-label">Nom</label>
+                <div class="col-sm-10">
+                    <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Contrasenya">
+                    <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"class="text-danger"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-6 mb-3 row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10 custom-checkbox" style = "padding-left: 2.5rem;">
+                    <input th:field="*{isActive}" type="checkbox" class="custom-control-input" id="active">
+                    <label class="custom-control-label" for="active">Es un producte alimentici</label>
+                    <label th:if="${#fields.hasErrors('isActive')}" th:errors="*{isActive}" class="text-danger text-danger"></label>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Crear Colaborador</button>
+        <label th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="text-danger"></label>
+    </form>
+</div>
+</body>
+
+</html>

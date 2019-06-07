@@ -25,33 +25,36 @@ public class MissatgeService {
         this.userRepository = userRepository;
     }
 
-    public List<Missatge> findMissatgesByReceptorId(int idR){
-        return missatgeRepository.findMissatgesByReceptorId(idR);
-    }
-    public List<Missatge> findMissatgesByEmisorId(int idE){
-        return missatgeRepository.findMissatgesByEmisorId(idE);
-    }
     public List<Missatge> getReciveMsg(User u){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        return missatgeRepository.findMissatgesByReceptor(user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return missatgeRepository.findAllByReceptor_EmailOrderByDataDesc(auth.getName());
     }
     public List<Missatge> getSendedMsg(User u){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        return missatgeRepository.findMissatgesByEmisor(user);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return missatgeRepository.findAllByEmisor_EmailOrderByDataDesc(auth.getName());
+    }
+    public int getcountMsg(User u){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return missatgeRepository.countReceptor_EmailAndLlegitIsFalse(auth.getName());
     }
 
-    public Missatge createMissatge(Missatge n, int receptorId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
-        n.setEmisor(user);
 
-        user = userRepository.findUserById(receptorId);
-        n.setReceptor(user);
+    public Missatge createMissatge(Missatge n, int receptorId){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        n.setEmisor(userRepository.findUserByEmail(auth.getName()));
+
+        n.setReceptor(userRepository.findUserById(receptorId));
+
+        n.setLlegit(false);
 
         return missatgeRepository.save(n);
     }
 
 
+
+
+
+    public List<Missatge> saveMissatges(List<Missatge> n){
+        return missatgeRepository.saveAll(n);
+    }
 }

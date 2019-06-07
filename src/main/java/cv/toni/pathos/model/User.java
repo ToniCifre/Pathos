@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -33,20 +34,28 @@ public class User {
     @NotEmpty(message = "Perfavor, introdueix una contrasenya.")
     private String password;
 
-    @Column(name = "name", unique = true, nullable = false, length = 16)
+    @Column(name = "name", unique = true, nullable = false, length = 35)
     @NotEmpty(message = "Perfavor, introdueix un nom.")
     private String name;
+
+    @Column(name = "descripcio", length = 500)
+    private String descripcio;
 
     @Column(name = "active", nullable =  false)
     private int active;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Transient
+    private Boolean isActive;
 
-    @ManyToMany
-    @JoinTable(name = "u_direct", joinColumns = @JoinColumn(name = "u_id"), inverseJoinColumns = @JoinColumn(name = "d_id"))
-    private Set<Direccio> direccions;
+    /*@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))*/
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "org_id")
+    private User orgId;
 
     public int getId() {
         return id;
@@ -88,15 +97,39 @@ public class User {
         this.active = active;
     }
 
-    public Set<Role> getRoles() { return roles; }
+    /*public Set<Role> getRoles() { return roles; }
 
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
+    public void setRoles(Set<Role> roles) { this.roles = roles; }*/
 
-    public Set<Direccio> getDireccions() {
-        return direccions;
+    public Role getRole() {
+        return role;
     }
 
-    public void setDireccions(Set<Direccio> direccions) {
-        this.direccions = direccions;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getDescripcio() {
+        return descripcio;
+    }
+
+    public void setDescripcio(String descripcio) {
+        this.descripcio = descripcio;
+    }
+
+    public User getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(User orgId) {
+        this.orgId = orgId;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean isActive) {
+        isActive = isActive;
     }
 }

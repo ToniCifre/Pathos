@@ -14,20 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class DireccioController {
 
     @Autowired
     private DireccioService direccioService;
-    @Autowired
-    private UserService userService;
 
     @RequestMapping(value={"/createDireccio"}, method = RequestMethod.GET)
-    public ModelAndView createDirection(){
+    public ModelAndView createDirection(Principal principal){
         ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        modelAndView.addObject("userName", auth.getName());
 
         modelAndView.addObject("fragmentName", "createDireccio");
 
@@ -38,29 +35,13 @@ public class DireccioController {
     }
 
     @RequestMapping(value = "/createDireccio", method = RequestMethod.POST)
-    public ModelAndView createDirection(@Valid Direccio direccio, BindingResult bindingResult){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        modelAndView.addObject("userName", auth.getName());
-
+    public ModelAndView createDirection(@Valid Direccio direccio, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
-            modelAndView.addObject("fragmentName", "createDireccio");
-            modelAndView.setViewName("home");
-            return modelAndView;
+            return new ModelAndView("redirect:/createDireccio");
         }else{
-            try{
-                direccio = direccioService.saveDireccio(direccio);
-                System.out.println("direc- "+direccio);
-                userService.addDirection(direccio);
-            }catch (Exception e) {
-                System.out.println(e);
-                System.out.println("========== ERROR GUARDANT DIRECCIÓ ================");
-            }
-
-            modelAndView.addObject("fragmentName", "home");
-            modelAndView.setViewName("home");
+            direccioService.saveDireccio(direccio, principal.getName());
         }
+        return new ModelAndView("redirect:/");
 
-        return modelAndView;
     }
 }

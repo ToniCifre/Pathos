@@ -24,14 +24,17 @@ public class Direccio {
     @Column(name = "direccio_id")
     private int id;
 
-    @Column(name = "dir")
+    @Column(name = "dir", nullable = false)
     @NotEmpty(message = "La direccio es necessaria")
     private String dir;
 
     @Column(name = "cp", nullable = false)
-    @Range(min = 1, max = 99999, message = "El rang del codi postal es entre 0 i 99999")
     @NotNull(message = "La codi postal es necessari")
     private int cp;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "u_id", nullable = false)
+    private User user;
 
     public int getId() {
         return id;
@@ -57,4 +60,11 @@ public class Direccio {
         this.cp = cp;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

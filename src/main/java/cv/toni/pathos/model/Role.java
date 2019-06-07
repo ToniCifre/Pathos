@@ -9,11 +9,16 @@ import javax.persistence.*;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "role")
 public class Role {
+
+    public Role(int id, String role) {
+        this.id = id;
+        this.role = role;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "role_id")

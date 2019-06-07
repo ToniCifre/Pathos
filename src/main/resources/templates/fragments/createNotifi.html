@@ -70,7 +70,7 @@
         <div class="form-group row isProduct" style="display: none;">
             <label for="caducitat" class="col-lg-1 col-sm-2 col-form-label">Data d'expiració</label>
             <div class="col-sm-7 col-md-4">
-                <input th:field="*{caducitat}" class="form-control" id="caducitat" placeholder="MM/DD/YYY" type="text"/>
+                <input th:field="*{caducitat}" class="form-control" id="caducitat" placeholder="MM-DD-YYY" type="text"/>
             </div>
             <label th:if="${#fields.hasErrors('caducitat')}" th:errors="*{caducitat}"class="text-danger"></label>
         </div>
@@ -88,7 +88,7 @@
 
     <script>
         var options={
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             todayHighlight: true,
             autoclose: true,
             language: "ca"
