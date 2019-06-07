@@ -43,6 +43,10 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
     public User findUserById(int id){return userRepository.findUserById(id);}
+    public User getUserAuth() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findUserByEmail(auth.getName());
+    }
     public List<User> findUsersByRol(Role role){return userRepository.findUsersByRole(role);}
 
     public User createUser(User user, String Role, int active){

@@ -4,13 +4,12 @@ import cv.toni.pathos.model.Direccio;
 import cv.toni.pathos.model.Notificacio;
 import cv.toni.pathos.model.NotifyStat;
 import cv.toni.pathos.model.User;
+import cv.toni.pathos.service.MissatgeService;
 import cv.toni.pathos.service.NotificacioService;
 import cv.toni.pathos.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 
 @Controller
@@ -30,18 +27,24 @@ public class NotificacioController {
     private NotificacioService notificationService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MissatgeService missatgeService;
 
     @PreAuthorize("hasRole('ORG')")
     @RequestMapping(value={"/notificacions"}, method = RequestMethod.GET)
     public ModelAndView notificationPage(){
         ModelAndView modelAndView = new ModelAndView();
-
+        modelAndView.setViewName("home");
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        User user = userService.getUserAuth();
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "notification");
 
-        List<Notificacio> notificacions= notificationService.getRecivedNotifications();
+        List<Notificacio> notificacions = notificationService.getRecivedNotifications();
         modelAndView.addObject("listNot", notificacions);
 
-        modelAndView.setViewName("home");
         return modelAndView;
     }
 
@@ -50,6 +53,11 @@ public class NotificacioController {
     public ModelAndView notificationPagetype(@PathVariable("tipus") String estat){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        User user = userService.getUserAuth();
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "notification");
 
         NotifyStat nt;
@@ -68,7 +76,6 @@ public class NotificacioController {
         }
 
         List<Notificacio> notificacions= notificationService.getRecivedNotificationsByEstat(nt);
-
         modelAndView.addObject("listNot", notificacions);
 
         return modelAndView;
@@ -84,14 +91,17 @@ public class NotificacioController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-
+        modelAndView.setViewName("home");
+        user = userService.getUserAuth();
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "createNotify");
 
-        Notificacio notify = new Notificacio();
-        modelAndView.addObject("notify", notify);
+        modelAndView.addObject("notify", new Notificacio());
 
-        List<Direccio> direccions = userService.getUserDirection();
-        modelAndView.addObject("listDire", direccions);
+        modelAndView.addObject("listDire", userService.getUserDirection());
 
         modelAndView.addObject("org", orgId);
         modelAndView.setViewName("home");

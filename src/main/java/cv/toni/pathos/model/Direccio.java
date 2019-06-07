@@ -32,7 +32,7 @@ public class Direccio {
     @NotNull(message = "La codi postal es necessari")
     private int cp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "u_id", nullable = false)
     private User user;
 

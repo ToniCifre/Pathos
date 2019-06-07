@@ -4,13 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -49,13 +45,16 @@ public class User {
 
     /*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))*/
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id")
     private Role role;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "org_id")
     private User orgId;
+
+    @Column(name = "photo")
+    private String photo;
 
     public int getId() {
         return id;
@@ -131,5 +130,13 @@ public class User {
 
     public void setActive(Boolean isActive) {
         isActive = isActive;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

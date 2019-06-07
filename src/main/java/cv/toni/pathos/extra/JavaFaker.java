@@ -65,6 +65,7 @@ public class JavaFaker {
             u.setPassword("tonicifre");
             u.setName(faker.name().firstName());
             u.setRole(org);
+            u.setPhoto("user/userDefault.jpg");
             userList.add(u);
         }
         for (int i = 0; i < 30; i++) {
@@ -75,6 +76,7 @@ public class JavaFaker {
             u.setName(faker.bothify(faker.name().firstName() + "####"));
             u.setRole(col);
             u.setOrgId(userList.get(i % 3));
+            u.setPhoto("user/userDefault.jpg");
             userList.add(u);
         }
         for (int i = 0; i < 500; i++) {
@@ -84,14 +86,11 @@ public class JavaFaker {
             u.setPassword("tonicifre");
             u.setName(faker.bothify(faker.name().firstName() + "#####?"));
             u.setRole(per);
+            u.setPhoto("user/userDefault.jpg");
             userList.add(u);
         }
 
-
         userList = userService.saveUsers(userList);
-
-
-        System.out.println("---------FIN-------------");
     }
 
     void generateDirections() {
@@ -169,13 +168,15 @@ public class JavaFaker {
             instant = faker.date().between(d1, d2).toInstant();
             m.setData(instant.atZone(defaultZoneId).toLocalDateTime());
 
-            m.setEmisor(userList.get(i%100));
-            m.setReceptor(userList.get(i % 100));
+            m.setSala(new Sala(new SalaId(userList.get(i) ,userList.get(i%3))));
+
+            m.setLlegit(false);
 
             missatgeList.add(m);
         }
 
         missatgeList = missatgeList.stream().sorted(Comparator.comparing(Missatge::getData)).collect(Collectors.toList());
+
 
         missatgeService.saveMissatges(missatgeList);
     }

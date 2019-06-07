@@ -1,7 +1,7 @@
 package cv.toni.pathos.controller;
 
-import cv.toni.pathos.model.Notificacio;
 import cv.toni.pathos.model.User;
+import cv.toni.pathos.service.MissatgeService;
 import cv.toni.pathos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +22,8 @@ public class AdminUser {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MissatgeService missatgeService;
 
 
     @PreAuthorize("hasRole('ORG')")
@@ -29,10 +31,14 @@ public class AdminUser {
     public ModelAndView nowColaboradorPage(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
-
+        User user = userService.getUserAuth();
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "nouColaborador");
 
-        User user = new User();
+        user = new User();
         modelAndView.addObject("user", user);
 
         return modelAndView;
@@ -42,7 +48,13 @@ public class AdminUser {
     @RequestMapping(value={"/nouColaborador"}, method = RequestMethod.POST)
     public ModelAndView nowColaboradorPage(@Valid User user, BindingResult bindingResult, Principal principal){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("nouColaborador");
+        modelAndView.setViewName("home");
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        User u = userService.getUserAuth();
+        modelAndView.addObject("name", u.getName());
+        modelAndView.addObject("logo", u.getPhoto());
+        modelAndView.addObject("fragmentName", "nouColaborador");
 
         if(!bindingResult.hasFieldErrors()){
             if (user.getEmail().length() > 50) {
@@ -63,12 +75,11 @@ public class AdminUser {
                     bindingResult.rejectValue("name", "error.user", "Ja hi ha un usuari amb aquest nom");
                 }
                 if (!bindingResult.hasFieldErrors()) {
-                    User org = userService.findUserByEmail(principal.getName());
-                    user.setOrgId(org);
+                    user.setOrgId(u);
                     if (userService.createUser(user, "COL", user.isActive()? 1 : 0) == null) {
                         bindingResult.rejectValue("id", "error.user", "No sha pogut crear El Colaborador");
                     } else {
-                        modelAndView.setViewName("redirect:/");
+                        return new ModelAndView("redirect:/");
                     }
                 }
             }

@@ -33,7 +33,18 @@ public class Missatge {
     @NotNull
     private boolean llegit;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumns({
+            @JoinColumn(
+                    name = "pers_id",
+                    referencedColumnName = "pers_id"),
+            @JoinColumn(
+                    name = "org_id",
+                    referencedColumnName = "org_id")
+    })
+    private Sala sala;
+
+    /*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "emisor_id")
     @NotNull
     private User emisor;
@@ -41,7 +52,7 @@ public class Missatge {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "receptor_id")
     @NotNull
-    private User receptor;
+    private User receptor;*/
 
     public int getId() {
         return id;
@@ -75,19 +86,11 @@ public class Missatge {
         this.llegit = llegit;
     }
 
-    public User getEmisor() {
-        return emisor;
+    public Sala getSala() {
+        return sala;
     }
 
-    public void setEmisor(User emisor) {
-        this.emisor = emisor;
-    }
-
-    public User getReceptor() {
-        return receptor;
-    }
-
-    public void setReceptor(User receptor) {
-        this.receptor = receptor;
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 }
