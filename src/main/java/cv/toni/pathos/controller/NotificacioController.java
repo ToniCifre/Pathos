@@ -1,6 +1,6 @@
 package cv.toni.pathos.controller;
 
-import cv.toni.pathos.model.Direccio;
+import cv.toni.pathos.model.Missatge;
 import cv.toni.pathos.model.Notificacio;
 import cv.toni.pathos.model.NotifyStat;
 import cv.toni.pathos.model.User;
@@ -41,6 +41,8 @@ public class NotificacioController {
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "notification");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
 
         List<Notificacio> notificacions = notificationService.getRecivedNotifications();
         modelAndView.addObject("listNot", notificacions);
@@ -59,6 +61,8 @@ public class NotificacioController {
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "notification");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
 
         NotifyStat nt;
         switch (estat) {
@@ -98,6 +102,8 @@ public class NotificacioController {
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "createNotify");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
 
         modelAndView.addObject("notify", new Notificacio());
 

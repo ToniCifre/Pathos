@@ -1,6 +1,7 @@
 package cv.toni.pathos.controller;
 
 import cv.toni.pathos.model.Direccio;
+import cv.toni.pathos.model.Missatge;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.service.DireccioService;
 import cv.toni.pathos.service.MissatgeService;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class DireccioController {
@@ -34,6 +36,8 @@ public class DireccioController {
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "createDireccio");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
 
         Direccio direccio = new Direccio();
         modelAndView.addObject("direccio", direccio);
@@ -45,7 +49,19 @@ public class DireccioController {
     @RequestMapping(value = "/createDireccio", method = RequestMethod.POST)
     public ModelAndView createDirection(@Valid Direccio direccio, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("redirect:/createDireccio");
+            ModelAndView modelAndView = new ModelAndView();
+            User user = userService.getUserAuth();
+            int nMis = missatgeService.getcountMsg();
+            modelAndView.addObject("nMis", nMis);
+            modelAndView.addObject("name", user.getName());
+            modelAndView.addObject("logo", user.getPhoto());
+            modelAndView.addObject("fragmentName", "createDireccio");
+            List<Missatge> msnList = missatgeService.find5Missatger();
+            modelAndView.addObject("msnList", msnList);
+
+            modelAndView.addObject("direccio", direccio);
+
+            modelAndView.setViewName("home");
         }
 
         direccioService.saveDireccio(direccio, principal.getName());

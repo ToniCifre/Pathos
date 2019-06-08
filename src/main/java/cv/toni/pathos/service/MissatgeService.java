@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service("missatgeService")
@@ -34,15 +35,38 @@ public class MissatgeService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return missatgeRepository.countAllBySala_SalaId_OrgId_Email(auth.getName());
     }
-    public List<Sala> findAllSalas(String email){
-        if(userRepository.findUserByEmail(email).getRole().getRole().equals("ORG")){
-            return salaRepository.findSalasBySalaId_OrgId_Email(email);
+    public List<Missatge> find5Missatger(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(userRepository.findUserByEmail(auth.getName()).getRole().getRole().equals("ORG")){
+            System.out.println("dfjghskdfjlghjklsdfhgjklhsdfkljgsdfjklg");
+            return missatgeRepository.findFirst5BySala_SalaId_OrgId_EmailAndSenderOrgTrueOrderByDataDesc(auth.getName());
         }else{
-            return salaRepository.findSalasBySalaId_PersonaId_Email(email);
+            System.out.println("nononoononononoonononono");
+            return missatgeRepository.findFirst5BySala_SalaId_PersonaId_EmailAndSenderOrgTrueOrderByDataDesc(auth.getName());
         }
     }
+    public List<Sala> findAllSalas(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(userRepository.findUserByEmail(auth.getName()).getRole().getRole().equals("ORG")){
+            return salaRepository.findSalasBySalaId_OrgId_Email(auth.getName());
+        }else{
+            return salaRepository.findSalasBySalaId_PersonaId_Email(auth.getName());
+        }
+    }
+
+    public Sala findSala(int id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByEmail(auth.getName());
+        if(user.getRole().getRole().equals("ORG")){
+            return salaRepository.findSalaBySalaId_PersonaId_IdAndSalaId_OrgId_Id(id, user.getId());
+        }else{
+            return salaRepository.findSalaBySalaId_PersonaId_IdAndSalaId_OrgId_Id(user.getId(), id);
+        }
+
+    }
+
     public List<Missatge> findAllBySala(Sala s){
-        return missatgeRepository.findAllBySala(s);
+        return missatgeRepository.findAllBySalaOrderByDataAsc(s);
     }
 
 
@@ -64,6 +88,8 @@ public class MissatgeService {
         n.setSala(ss);
 
         n.setLlegit(false);
+
+        n.setData(LocalDateTime.now());
 
         return missatgeRepository.save(n);
     }

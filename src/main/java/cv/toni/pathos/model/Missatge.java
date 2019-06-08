@@ -33,6 +33,10 @@ public class Missatge {
     @NotNull
     private boolean llegit;
 
+    @Column(name = "is_org")
+    @NotNull
+    private boolean senderOrg;
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumns({
             @JoinColumn(
@@ -84,6 +88,14 @@ public class Missatge {
 
     public void setLlegit(boolean llegit) {
         this.llegit = llegit;
+    }
+
+    public boolean idSenderOrg() {
+        return senderOrg;
+    }
+
+    public void setOrg(boolean org) {
+        senderOrg = org;
     }
 
     public Sala getSala() {

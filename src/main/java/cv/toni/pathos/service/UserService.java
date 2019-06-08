@@ -74,6 +74,14 @@ public class UserService {
         return userRepository.saveAll(users);
     }
 
+    public User updateUser(User u){
+        return userRepository.save(u);
+    }
+    public User updatePasword(User u){
+        u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));
+        return userRepository.save(u);
+    }
+
     public Role getRole(String role){
         return roleRepository.findByRole(role);
     }

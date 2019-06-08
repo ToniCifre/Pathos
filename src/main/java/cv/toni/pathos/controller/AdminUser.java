@@ -1,5 +1,6 @@
 package cv.toni.pathos.controller;
 
+import cv.toni.pathos.model.Missatge;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.service.MissatgeService;
 import cv.toni.pathos.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -37,6 +39,8 @@ public class AdminUser {
         modelAndView.addObject("name", user.getName());
         modelAndView.addObject("logo", user.getPhoto());
         modelAndView.addObject("fragmentName", "nouColaborador");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
 
         user = new User();
         modelAndView.addObject("user", user);
@@ -49,12 +53,7 @@ public class AdminUser {
     public ModelAndView nowColaboradorPage(@Valid User user, BindingResult bindingResult, Principal principal){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("home");
-        int nMis = missatgeService.getcountMsg();
-        modelAndView.addObject("nMis", nMis);
         User u = userService.getUserAuth();
-        modelAndView.addObject("name", u.getName());
-        modelAndView.addObject("logo", u.getPhoto());
-        modelAndView.addObject("fragmentName", "nouColaborador");
 
         if(!bindingResult.hasFieldErrors()){
             if (user.getEmail().length() > 50) {
@@ -84,6 +83,14 @@ public class AdminUser {
                 }
             }
         }
+
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", u.getName());
+        modelAndView.addObject("logo", u.getPhoto());
+        modelAndView.addObject("fragmentName", "nouColaborador");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
         return modelAndView;
     }
 
@@ -100,5 +107,42 @@ public class AdminUser {
         return new ModelAndView("redirect:/login");
     }
 
+
+
+    @RequestMapping(value={"/adminUser"}, method = RequestMethod.GET)
+    public ModelAndView adminUserPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        User user = userService.getUserAuth();
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
+        modelAndView.addObject("fragmentName", "adminUser");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("user", user);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/adminUser"}, method = RequestMethod.POST)
+    public ModelAndView adminUserPagepost(@Valid User user, BindingResult bindingResult){
+        User u = userService.getUserAuth();
+        u.setName(user.getName());
+        u.setEmail(user.getEmail());
+        u.setDescripcio(user.getDescripcio());
+        userService.updateUser(u);
+        return new ModelAndView("redirect:/login");
+    }
+
+    @RequestMapping(value={"/adminContra"}, method = RequestMethod.POST)
+    public ModelAndView admincontraPage(@Valid User user, BindingResult bindingResult){
+        User u = userService.getUserAuth();
+        u.setPassword(user.getPassword());
+        userService.updatePasword(u);
+        return new ModelAndView("redirect:/login");
+    }
 
 }
