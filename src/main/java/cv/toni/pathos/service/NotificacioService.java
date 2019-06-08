@@ -33,7 +33,11 @@ public class NotificacioService {
 
     public List<Notificacio> getRecivedNotifications(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return notificacioRepository.findAllByReceptor_EmailOrderByDataDesc(auth.getName());
+        return notificacioRepository.findNotificaciosByReceptor_EmailOrderByDataDesc(auth.getName());
+    }
+    public List<Notificacio> getSendedNotifications(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return notificacioRepository.findNotificaciosByEmisor_EmailOrderByDataDesc(auth.getName());
     }
 
     public List<Notificacio> getRecivedNotificationsByEstat(NotifyStat stat){
@@ -68,5 +72,11 @@ public class NotificacioService {
 
     public List<Notificacio> saveNotifications(List<Notificacio> n){
         return notificacioRepository.saveAll(n);
+    }
+
+
+
+    public void delete(int id){
+        notificacioRepository.delete(findNotificaciosById(id));
     }
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="container">
+
+    <div th:fragment="f-AdminDireccio" class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Direccions</h1>
+            <a href="/createDireccio" class="btn btn-primary btn-user">Afegir</a>
+        </div>
+        <div class="row">
+
+            <div class="col-12" th:each="direct : ${listDirect}">
+                <form class="user" th:action="@{/adminDireccio/} + ${direct.id}" th:object="${direccio}"
+                      method="POST">
+                    <!-- Dropdown Card Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="dire" class="col-lg-1 col-sm-3 col-form-label" th:text="${direct.dir}">Direcció</label>
+                                <div class="col-sm-9 mb-3">
+                                    <input id="dire" type="text" th:field="*{dir}"
+                                           class="form-control form-control-user" placeholder="Direcció" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cp" class="col-lg-1 col-sm-3 col-form-label" th:text="${direct.cp}">Codi postal</label>
+                                <div class="col-sm-9 mb-3">
+                                    <input id="cp" type="number" th:field="*{cp}"
+                                           class="form-control form-control-user" placeholder="Codi postal" required>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

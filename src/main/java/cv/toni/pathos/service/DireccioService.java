@@ -31,6 +31,10 @@ public class DireccioService {
 
     public List<Direccio> findDirecciosByUserEmail(String uEmail){ return direccioRepository.findDirecciosByUserEmail(uEmail);}
 
+    public Direccio findDireccio(int id) {
+        return direccioRepository.findById(id);
+    }
+
     public Direccio saveDireccio(Direccio direccio, String email) {
         direccio.setUser(userRepository.findUserByEmail(email));
         return direccioRepository.save(direccio);
@@ -39,5 +43,16 @@ public class DireccioService {
     @Transactional
     public List<Direccio> savedirections(List<Direccio> d){
         return direccioRepository.saveAll(d);
+    }
+
+    public Direccio updateDireccio(Direccio d){
+        Direccio direct = findDireccio(d.getId());
+        direct.setDireccio(d.getDireccio());
+        direct.setCp(d.getCp());
+        return direccioRepository.save(direct);
+    }
+
+    public void delete(int id){
+        direccioRepository.delete(findDireccio(id));
     }
 }

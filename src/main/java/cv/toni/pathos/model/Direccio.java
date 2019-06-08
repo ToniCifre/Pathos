@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -32,7 +32,8 @@ public class Direccio {
     @NotNull(message = "La codi postal es necessari")
     private int cp;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "u_id", nullable = false)
     private User user;
 
@@ -67,4 +68,6 @@ public class Direccio {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public Direccio getThis(){return this;}
 }

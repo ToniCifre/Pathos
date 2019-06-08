@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -49,7 +51,8 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "org_id")
     private User orgId;
 
@@ -96,9 +99,6 @@ public class User {
         this.active = active;
     }
 
-    /*public Set<Role> getRoles() { return roles; }
-
-    public void setRoles(Set<Role> roles) { this.roles = roles; }*/
 
     public Role getRole() {
         return role;
@@ -128,8 +128,8 @@ public class User {
         return isActive;
     }
 
-    public void setActive(Boolean isActive) {
-        isActive = isActive;
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getPhoto() {
@@ -139,4 +139,6 @@ public class User {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+
 }

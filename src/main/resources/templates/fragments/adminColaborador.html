@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="container">
+
+    <div th:fragment="f-AdminCol" class="container-fluid">
+        <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+        <!-- Page Heading -->
+        <h1 class="h3 mb-4 text-gray-800">Colaboradors</h1>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Actiu</th>
+                            <th>Admin</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Actiu</th>
+                            <th>Admin</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each="col : ${colList}">
+                            <td th:text="${col.name}"></td>
+                            <td th:text="${col.email}"></td>
+                            <td th:text="${col.active}"></td>
+                            <td> <a class="btn btn-primary" th:href="@{/adminColaborador/} + ${col.id}"></a> </td>
+                        </tr>
+
+                        </tbody>
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+        <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+        <script th:src="@{/js/demo/datatables-demo.js}"></script>
+    </div>
+
+</div>
+
+
+</body>
+</html>

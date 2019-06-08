@@ -38,10 +38,8 @@ public class MissatgeService {
     public List<Missatge> find5Missatger(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(userRepository.findUserByEmail(auth.getName()).getRole().getRole().equals("ORG")){
-            System.out.println("dfjghskdfjlghjklsdfhgjklhsdfkljgsdfjklg");
             return missatgeRepository.findFirst5BySala_SalaId_OrgId_EmailAndSenderOrgTrueOrderByDataDesc(auth.getName());
         }else{
-            System.out.println("nononoononononoonononono");
             return missatgeRepository.findFirst5BySala_SalaId_PersonaId_EmailAndSenderOrgTrueOrderByDataDesc(auth.getName());
         }
     }

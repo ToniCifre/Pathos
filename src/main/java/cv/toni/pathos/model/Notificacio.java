@@ -43,15 +43,15 @@ public class Notificacio {
     @Column(name = "estat", nullable = false, length = 10)
     private NotifyStat estat;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(nullable = false, name = "emisor_id")
     private User emisor;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(nullable = false, name = "receptor_id")
     private User receptor;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(nullable = false, name = "direccio_id")
     private Direccio direccio;
 

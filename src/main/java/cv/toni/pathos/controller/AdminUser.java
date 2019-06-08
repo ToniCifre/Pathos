@@ -43,6 +43,7 @@ public class AdminUser {
         modelAndView.addObject("msnList", msnList);
 
         user = new User();
+        user.setActive(false);
         modelAndView.addObject("user", user);
 
         return modelAndView;
@@ -51,8 +52,7 @@ public class AdminUser {
     @PreAuthorize("hasRole('ORG')")
     @RequestMapping(value={"/nouColaborador"}, method = RequestMethod.POST)
     public ModelAndView nowColaboradorPage(@Valid User user, BindingResult bindingResult, Principal principal){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+
         User u = userService.getUserAuth();
 
         if(!bindingResult.hasFieldErrors()){
@@ -84,6 +84,8 @@ public class AdminUser {
             }
         }
 
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
         modelAndView.addObject("name", u.getName());
@@ -98,12 +100,12 @@ public class AdminUser {
 
 
     @GetMapping("/delete/{id}")
-    public ModelAndView deleteUser(@PathVariable("id") int id, Principal principal) {
-        User user = userService.findUserByEmail(principal.getName());
+    public ModelAndView deleteUser(@PathVariable("id") int id) {
+       /* User user = userService.findUserByEmail(principal.getName());
         if(user.getId() != id){
             return new ModelAndView("redirect:/");
-        }
-        userService.deleteUser(user);
+        }*/
+        userService.deleteUser(userService.findUserById(id));
         return new ModelAndView("redirect:/login");
     }
 
@@ -145,4 +147,74 @@ public class AdminUser {
         return new ModelAndView("redirect:/login");
     }
 
+    @RequestMapping(value={"/adminColaborador"}, method = RequestMethod.GET)
+    public ModelAndView adminColPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        User user = userService.getUserAuth();
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
+        modelAndView.addObject("fragmentName", "AdminCol");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+
+        List<User> colList = userService.getColaboradors(user.getEmail());
+        modelAndView.addObject("colList", colList);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/adminColaborador/{col-id}"}, method = RequestMethod.GET)
+    public ModelAndView adminColPage(@PathVariable("col-id") int colId){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        User user = userService.getUserAuth();
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
+        modelAndView.addObject("fragmentName", "nouColaborador");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+        User col = userService.findUserById(colId);
+        col.setActive(col.getActive() == 1);
+        modelAndView.addObject("user", col);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/adminColaborador/{col-id}"}, method = RequestMethod.POST)
+    public ModelAndView adminColeditPage(@PathVariable("col-id") int colId, @Valid User user, BindingResult bindingResult) {
+
+        User col = userService.findUserById(colId);
+        col.setEmail(user.getEmail());
+        col.setName(user.getName());
+        col.setActive(user.isActive() ? 1:0);
+        System.out.println(col);
+        if (userService.updateUser(col)==null) {
+            bindingResult.rejectValue("id", "error.user", "El nom o el mail ja existeix");
+        } else {
+            return new ModelAndView("redirect:/adminColaborador");
+        }
+
+
+        User u = userService.getUserAuth();
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        modelAndView.addObject("name", u.getName());
+        modelAndView.addObject("logo", u.getPhoto());
+        modelAndView.addObject("fragmentName", "nouColaborador");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("user", col);
+
+        return modelAndView;
+    }
 }

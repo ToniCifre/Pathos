@@ -250,6 +250,12 @@
                 <div th:case="'adminUser'">
                     <div th:replace="fragments/adminUser.html :: f-AdminUser"></div>
                 </div>
+                <div th:case="'adminDireccio'">
+                    <div th:replace="fragments/adminDireccio.html :: f-AdminDireccio"></div>
+                </div>
+                <div th:case="'AdminCol'">
+                    <div th:replace="fragments/adminColaborador.html :: f-AdminCol"></div>
+                </div>
             </th:block>
 
             <!-- /.container-fluid -->

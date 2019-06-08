@@ -49,6 +49,8 @@ public class UserService {
     }
     public List<User> findUsersByRol(Role role){return userRepository.findUsersByRole(role);}
 
+    public List<User> getColaboradors(String email){return userRepository.findUsersByOrgId_Email(email);}
+
     public User createUser(User user, String Role, int active){
         try{
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -75,7 +77,9 @@ public class UserService {
     }
 
     public User updateUser(User u){
-        return userRepository.save(u);
+        try {
+            return userRepository.save(u);
+        }catch (Exception e){return null;}
     }
     public User updatePasword(User u){
         u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));

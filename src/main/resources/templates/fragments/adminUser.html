@@ -10,62 +10,72 @@
 <div class="container">
 
     <div th:fragment="f-AdminUser" class="container-fluid">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Modificar Caracteriatiques</h6>
-            </div>
-            <div class="card-body">
-                <form class="user" th:action="@{/adminUser}" th:object="${user}" method="POST">
 
-                    <div class="form-group row">
-                        <label for="name" class="col-lg-1 col-sm-2 col-form-label">Nom</label>
-                        <div class="col-sm-10 mb-3">
-                            <input id="name" type="text" th:field="*{name}" th:value="${user.name}"
-                                   class="form-control form-control-user" placeholder="Name" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="email" class="col-lg-1 col-sm-2 col-form-label">Email</label>
-                        <div class="col-sm-10 mb-3">
-                            <input id="email" type="email" th:field="*{email}" th:value="${user.email}"
-                                   class="form-control form-control-user" placeholder="Email Address" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="descripcio" class="col-lg-1 col-sm-2 col-form-label">Descripció</label>
-                        <div class="col-sm-10 mb-3">
-                            <textarea th:field="*{descripcio}" th:value="${user.descripcio}"type="text" class="form-control" id="descripcio" placeholder="Descripció mes explicativa i informació extra"></textarea>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
-                    <label th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="text-danger"></label>
-
-                </form>
-            </div>
-
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Editar Usuari</h1>
         </div>
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Cambiar contra</h6>
-            </div>
-            <div class="card-body">
 
-                <form class="user" th:action="@{/adminContra}" th:object="${user}" method="POST">
-                    <div class="form-group row">
-                        <label for="pasw" class="col-lg-1 col-sm-2 col-form-label">Contra</label>
-                        <div class="col-sm-10 mb-3">
-                            <input id="pasw" type="text" th:field="*{password}" class="form-control form-control-user" required>
+        <div class="row">
+            <div class="card shadow mb-4 col-12">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Modificar Informació</h6>
+                </div>
+                <div class="card-body">
+                    <form class="user" th:action="@{/adminUser}" th:object="${user}" method="POST">
+
+                        <div class="form-group row">
+                            <label for="name" class="col-lg-2 col-form-label">Nom</label>
+                            <div class="col-sm-9 mb-3">
+                                <input id="name" type="text" th:field="*{name}"
+                                       class="form-control form-control-user" placeholder="Name" required>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group row">
+                            <label for="email" class="col-lg-2 col-form-label">Email</label>
+                            <div class="col-sm-10 mb-3">
+                                <input id="email" type="email" th:field="*{email}"
+                                       class="form-control form-control-user" placeholder="Email Address" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="descripcio" class="col-lg-2 col-form-label">Descripció</label>
+                            <div class="col-sm-10 mb-3">
+                                <textarea th:field="*{descripcio}" type="text"
+                                          class="form-control" id="descripcio"
+                                          placeholder="Descripció mes explicativa i informació extra"></textarea>
+                            </div>
+                        </div>
 
-                    <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
-                </form>
+                        <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
+                        <label th:if="${#fields.hasErrors('id')}" th:errors="*{id}" class="text-danger"></label>
 
+                    </form>
+                </div>
+
+            </div>
+            <div class="card shadow mb-4 col-12">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Cambiar contra</h6>
+                </div>
+                <div class="card-body">
+
+                    <form class="user" th:action="@{/adminContra}" th:object="${user}" method="POST">
+                        <div class="form-group row">
+                            <label for="pasw" class="col-lg-1 col-sm-2 col-form-label">Contra</label>
+                            <div class="col-sm-10 mb-3">
+                                <input id="pasw" type="password" th:field="*{password}"
+                                       class="form-control form-control-user" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
+                    </form>
+
+                </div>
             </div>
         </div>
+
     </div>
-
 </div>
 
 

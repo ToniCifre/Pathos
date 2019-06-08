@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -85,6 +86,25 @@ public class NotificacioController {
         return modelAndView;
     }
 
+    @RequestMapping(value={"/notificacions/enviades"}, method = RequestMethod.GET)
+    public ModelAndView notificationEnviadesPage(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home");
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        User user = userService.getUserAuth();
+        modelAndView.addObject("name", user.getName());
+        modelAndView.addObject("logo", user.getPhoto());
+        modelAndView.addObject("fragmentName", "notification");
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+        List<Notificacio> notificacions= notificationService.getSendedNotifications();
+        modelAndView.addObject("listNot", notificacions);
+
+        return modelAndView;
+    }
+
     @RequestMapping(value={"/enviar_notificacio/{org-id}"}, method = RequestMethod.GET)
     public ModelAndView createNotification( @PathVariable("org-id") int orgId){
         User user = userService.findUserById(orgId);
@@ -123,5 +143,19 @@ public class NotificacioController {
         }
         return new ModelAndView("redirect:/");
 
+    }
+
+
+    @RequestMapping(value={"/setEstat/{id}/{estat}"}, method = RequestMethod.GET)
+    public ModelAndView cambirEstatNotify( @PathVariable("id") int id,@PathVariable("estat") String estat){
+
+        notificationService.setEstat(estat, id);
+        return new ModelAndView("redirect:/notificacions");
+    }
+
+    @GetMapping("/delete/notificacio/{id}")
+    public ModelAndView deleteUser(@PathVariable("id") int id) {
+        notificationService.delete(id);
+        return new ModelAndView("redirect:/");
     }
 }
