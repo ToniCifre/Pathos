@@ -41,11 +41,7 @@
         <div class="col-lg-6" th:each="notificacio: ${listNot}">
             <!-- Dropdown Card Example -->
 
-            <div class="card shadow mb-4" th:classappend="|${notificacio.estat.name() == 'RECOLLIT' ? 'border-left-success' : ''}
-            ${notificacio.estat.name() == 'ACCEPTAT' ? 'border-left-primary' : ''}
-            ${notificacio.estat.name() == 'PENDENT' ? 'border-left-warning' : ''}
-            ${notificacio.estat.name() == 'CANCELAT' ? 'border-left-danger' : ''}
-            ${notificacio.estat.name() == 'DENEGAT' ? 'border-left-danger' : ''}|">
+            <div class="card shadow mb-4" th:classappend="|${notificacio.estat.name() == 'RECOLLIT' ? 'border-left-success' : ''}${notificacio.estat.name() == 'ACCEPTAT' ? 'border-left-primary' : ''}${notificacio.estat.name() == 'PENDENT' ? 'border-left-warning' : ''}${notificacio.estat.name() == 'CANCELAT' ? 'border-left-danger' : ''}${notificacio.estat.name() == 'DENEGAT' ? 'border-left-danger' : ''}|">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary" th:text="${notificacio.titol}"></h6>
@@ -55,13 +51,20 @@
                            aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                             <div class="dropdown-header" >Cambiar Estat</div>
-                            <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/ACCEPTAT'">Acceptar</a>
-                            <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/RECOLLIT'">Recollit</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/DENEGAT'">Denegar</a>
+                            <div  th:if="${auth.role.role}=='ORG' or ${auth.role.role}=='COL'">
+                                <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/ACCEPTAT'">Acceptar</a>
+                                <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/RECOLLIT'">Recollit</a>
+                                <div  th:if="${auth.role.role}=='ORG'">
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" sec:authentication="name" th:href="'/setEstat/'+${notificacio.id}+'/DENEGAT'">Denegar</a>
+                                    <a class="dropdown-item" sec:authentication="name" th:href="'/delete/notificacio/'+${notificacio.id}">Eliminar</a>
+                                </div>
+                            </div>
+                            <div  th:if="${auth.role.role}=='PER' and  ${notificacio.estat.name()}!= 'RECOLLIT'">
+                                <a class="dropdown-item" th:href="'/setEstat/'+${notificacio.id}+'/CANCELAT'">Cancelar</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,11 +72,14 @@
                 <div class="card-body" >
                     <div th:text="${notificacio.descripcio}"></div>
                     <div class="dropdown-divider"></div>
+                    <div class="py-1" th:if="${notificacio.recollidor}" th:text="${notificacio.recollidor.name}"></div>
+                    <div class="py-1" th:unless="${notificacio.recollidor}" th:text="'Direcció: '+${notificacio.direccio.dir}+', '+${notificacio.direccio.cp}"></div>
                     <small >
-                        <div class="float-left" th:if="${notificacio.isProduct}" th:text="'Caduca el: '+${notificacio.caducitat}"></div>
-                        <div class="float-right" th:text="${#temporals.format(notificacio.data, 'dd-MM-yyyy HH:mm')}"></div>
+                        <div class="float-right" th:if="${notificacio.isProduct}" th:text="'Caduca el: '+${notificacio.caducitat}"></div>
+                        <div class="float-left" th:text="${#temporals.format(notificacio.data, 'dd-MM-yyyy HH:mm')}"></div>
                     </small>
                 </div>
+
             </div>
         </div>
     </div>

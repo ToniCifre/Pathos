@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Data
 @Builder
@@ -45,8 +46,6 @@ public class User {
     @Transient
     private Boolean isActive;
 
-    /*@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))*/
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "role_id")
     private Role role;
@@ -55,6 +54,10 @@ public class User {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "org_id")
     private User orgId;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<User> colaboradors;
+
 
     @Column(name = "photo")
     private String photo;

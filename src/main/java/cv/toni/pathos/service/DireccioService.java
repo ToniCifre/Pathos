@@ -3,6 +3,8 @@ package cv.toni.pathos.service;
 import cv.toni.pathos.model.Direccio;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.repository.DireccioRepository;
+import cv.toni.pathos.repository.MissatgeRepository;
+import cv.toni.pathos.repository.NotificacioRepository;
 import cv.toni.pathos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,20 +21,25 @@ import java.util.List;
 public class DireccioService {
 
     private DireccioRepository direccioRepository;
+    private NotificacioRepository notificacioRepository;
     private UserRepository  userRepository;
 
 
     @Autowired
     public DireccioService(@Qualifier("direccioRepository") DireccioRepository direccioRepository,
+                           @Qualifier("notificacioRepository") NotificacioRepository notificacioRepository,
                            @Qualifier("userRepository") UserRepository userRepository) {
         this.direccioRepository = direccioRepository;
+        this.notificacioRepository = notificacioRepository;
         this.userRepository = userRepository;
     }
 
     public List<Direccio> findDirecciosByUserEmail(String uEmail){ return direccioRepository.findDirecciosByUserEmail(uEmail);}
 
     public Direccio findDireccio(int id) {
-        return direccioRepository.findById(id);
+        try {
+            return direccioRepository.findById(id);
+        }catch (Exception e){return null;}
     }
 
     public Direccio saveDireccio(Direccio direccio, String email) {
@@ -53,6 +60,10 @@ public class DireccioService {
     }
 
     public void delete(int id){
-        direccioRepository.delete(findDireccio(id));
+        Direccio d = findDireccio(id);
+        if(d != null) {
+            notificacioRepository.removeAllByDireccio(d);
+            direccioRepository.delete(d);
+        }
     }
 }

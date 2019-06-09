@@ -5,6 +5,7 @@ import cv.toni.pathos.model.Role;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.repository.DireccioRepository;
 import cv.toni.pathos.repository.RoleRepository;
+import cv.toni.pathos.repository.SalaRepository;
 import cv.toni.pathos.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,19 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private DireccioRepository direccioRepository;
+    private SalaRepository salaRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(@Qualifier("userRepository") UserRepository userRepository,
                        @Qualifier("roleRepository") RoleRepository roleRepository,
                        @Qualifier("direccioRepository") DireccioRepository direccioRepository,
+                       @Qualifier("salaRepository") SalaRepository salaRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.direccioRepository = direccioRepository;
+        this.salaRepository = salaRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -42,12 +46,14 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
-    public User findUserById(int id){return userRepository.findUserById(id);}
+    public User findUserById(int id) {
+        try { return userRepository.findUserById(id); } catch (Exception e) { return null; }
+    }
     public User getUserAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findUserByEmail(auth.getName());
     }
-    public List<User> findUsersByRol(Role role){return userRepository.findUsersByRole(role);}
+    public List<User> findUsersByRol(String role){return userRepository.findUsersByRole_Role(role);}
 
     public List<User> getColaboradors(String email){return userRepository.findUsersByOrgId_Email(email);}
 
@@ -90,14 +96,20 @@ public class UserService {
         return roleRepository.findByRole(role);
     }
 
-    public void deleteUser(User user){
-        userRepository.delete(user);
-    }
-
-
     public List<Direccio> getUserDirection(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return new ArrayList<>(direccioRepository.findDirecciosByUserEmail(auth.getName()));
+    }
+
+
+
+    public void deleteUser(User user){
+        if(user.getRole().getRole().equals("ORG")){
+            salaRepository.removeAllBySalaId_OrgId(user);
+        }else{
+            salaRepository.removeAllBySalaId_PersonaId(user);
+        }
+        userRepository.delete(user);
     }
 
 }

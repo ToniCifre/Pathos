@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,16 +29,23 @@ public class MissatgeColtroller {
     @RequestMapping(value={"/missatges"}, method = RequestMethod.GET)
     public ModelAndView missatgePage(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
-        User user = userService.getUserAuth();
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "missatges");
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
+        modelAndView.addObject("fragmentName", "missatges");
 
-        List<Sala> salaList = missatgeService.findAllSalas();
-        List<User> listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
+        List<User> listContact;
+        if (auth.getRole().getRole().equals("ORG")) {
+            List<Sala> salaList = missatgeService.findAllSalas();
+            listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
+        } else{
+            listContact= userService.findUsersByRol("ORG");
+        }
+
         modelAndView.addObject("listContact", listContact);
 
 
@@ -47,23 +55,34 @@ public class MissatgeColtroller {
     @RequestMapping(value={"/missatges/{contact}"}, method = RequestMethod.GET)
     public ModelAndView missatgePageContact(@PathVariable("contact") int contact){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
-        User user = userService.getUserAuth();
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
         modelAndView.addObject("fragmentName", "missatges");
-        List<Missatge> msnLists = missatgeService.find5Missatger();
-        modelAndView.addObject("msnList", msnLists);
 
-        List<Sala> salaList = missatgeService.findAllSalas();
-        List<User> listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
+        List<User> listContact;
+        if (auth.getRole().getRole().equals("ORG")) {
+            List<Sala> salaList = missatgeService.findAllSalas();
+            listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
+        } else{
+            listContact= userService.findUsersByRol("ORG");
+        }
         modelAndView.addObject("listContact", listContact);
 
-        Sala s = missatgeService.findSala(contact);
-        List<Missatge> msnList = missatgeService.findAllBySala(s);
-        modelAndView.addObject("listMsn", msnList);
+        Sala s = missatgeService.findSala(contact, auth);
+        List<Missatge> msnAllList= missatgeService.findAllBySala(s);
+        modelAndView.addObject("listMsn", msnAllList);
+        missatgeService.llegirMissatge(msnAllList, auth);
 
-        modelAndView.addObject("contacte", s.getSalaId().getPersonaId());
+        if (auth.getRole().getRole().equals("ORG")) {
+            modelAndView.addObject("contacte", s.getSalaId().getPersonaId());
+        } else{
+            modelAndView.addObject("contacte", userService.findUserById(contact));
+        }
 
         modelAndView.addObject("missatge",new Missatge());
 

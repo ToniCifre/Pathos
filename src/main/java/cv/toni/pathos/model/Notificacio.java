@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -52,6 +54,11 @@ public class Notificacio {
     private User receptor;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "recollidor")
+    private User recollidor;
+
+    @ManyToOne()
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false, name = "direccio_id")
     private Direccio direccio;
 
@@ -128,5 +135,13 @@ public class Notificacio {
     public NotifyStat getEstat() { return estat; }
 
     public void setEstat(NotifyStat estat) { this.estat = estat; }
+
+    public User getRecollidor() {
+        return recollidor;
+    }
+
+    public void setRecollidor(User recollidor) {
+        this.recollidor = recollidor;
+    }
 }
 

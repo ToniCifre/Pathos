@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("notificacioService")
@@ -31,18 +32,19 @@ public class NotificacioService {
         this.direccioRepository = direccioRepository;
     }
 
-    public List<Notificacio> getRecivedNotifications(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return notificacioRepository.findNotificaciosByReceptor_EmailOrderByDataDesc(auth.getName());
+    public List<Notificacio> getRecivedNotifications(User u){
+        return notificacioRepository.findNotificaciosByReceptor_EmailOrderByDataDesc(u.getEmail());
     }
-    public List<Notificacio> getSendedNotifications(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return notificacioRepository.findNotificaciosByEmisor_EmailOrderByDataDesc(auth.getName());
+    public List<Notificacio> getOrgRecivedNotifications(User u){
+        return notificacioRepository.findNotificaciosByReceptor_EmailOrderByDataDesc(u.getEmail());
+    }
+    public List<Notificacio> getSendedNotifications(User user){
+        try { return notificacioRepository.findAllByEmisor_IdOrderByDataDesc(user.getId());
+        }catch (Exception e ){return new ArrayList<>();}
     }
 
-    public List<Notificacio> getRecivedNotificationsByEstat(NotifyStat stat){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return notificacioRepository.findAllByReceptor_EmailAndEstatOrderByDataDesc( auth.getName(), stat);
+    public List<Notificacio> getRecivedNotificationsByEstat(User u,NotifyStat stat){
+        return notificacioRepository.findAllByReceptor_EmailAndEstatOrderByDataDesc( u.getEmail(), stat);
     }
 
     public Notificacio findNotificaciosById(int id){return notificacioRepository.findNotificaciosById(id);}
@@ -62,9 +64,10 @@ public class NotificacioService {
         return notificacioRepository.save(n);
     }
 
-    public Notificacio setEstat(String estat, int id){
+    public Notificacio setEstat(String estat, int id, User u){
         Notificacio n = findNotificaciosById(id);
         n.setEstat(NotifyStat.valueOf(estat));
+        n.setRecollidor(u);
         return notificacioRepository.save(n);
     }
 

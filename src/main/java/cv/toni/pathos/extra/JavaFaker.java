@@ -167,7 +167,7 @@ public class JavaFaker {
             instant = faker.date().between(d1, d2).toInstant();
             m.setData(instant.atZone(defaultZoneId).toLocalDateTime());
 
-            m.setSala(new Sala(new SalaId(userList.get(faker.number().numberBetween(35,500)) ,userList.get(i%3))));
+            m.setSala(new Sala(new SalaId(userList.get(faker.number().numberBetween(35,100)) ,userList.get(i%3))));
 
             m.setLlegit(false);
             m.setOrg(faker.bool().bool());

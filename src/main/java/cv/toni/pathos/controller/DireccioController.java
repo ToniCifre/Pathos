@@ -33,14 +33,15 @@ public class DireccioController {
     @RequestMapping(value={"/createDireccio"}, method = RequestMethod.GET)
     public ModelAndView createDirection(Principal principal){
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.getUserAuth();
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "createDireccio");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("fragmentName", "createDireccio");
 
         Direccio direccio = new Direccio();
         modelAndView.addObject("direccio", direccio);
@@ -53,39 +54,40 @@ public class DireccioController {
     public ModelAndView createDirection(@Valid Direccio direccio, BindingResult bindingResult, Principal principal){
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView();
-            User user = userService.getUserAuth();
+            modelAndView.setViewName("home.html");
+            User auth = userService.getUserAuth();
+            modelAndView.addObject("auth", auth);
             int nMis = missatgeService.getcountMsg();
             modelAndView.addObject("nMis", nMis);
-            modelAndView.addObject("name", user.getName());
-            modelAndView.addObject("logo", user.getPhoto());
-            modelAndView.addObject("fragmentName", "createDireccio");
             List<Missatge> msnList = missatgeService.find5Missatger();
             modelAndView.addObject("msnList", msnList);
+            modelAndView.addObject("fragmentName", "createDireccio");
 
             modelAndView.addObject("direccio", direccio);
 
             modelAndView.setViewName("home");
+            return modelAndView;
         }
 
         direccioService.saveDireccio(direccio, principal.getName());
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/adminDireccio");
     }
 
 
     @RequestMapping(value={"/adminDireccio"}, method = RequestMethod.GET)
     public ModelAndView adminDirection(){
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.getUserAuth();
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "adminDireccio");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
+        modelAndView.addObject("fragmentName", "adminDireccio");
 
-        List<Direccio> listDirect = direccioService.findDirecciosByUserEmail(user.getEmail());
+        List<Direccio> listDirect = direccioService.findDirecciosByUserEmail(auth.getEmail());
         modelAndView.addObject("listDirect", listDirect);
         modelAndView.addObject("direccio", new Direccio());
 
@@ -94,7 +96,7 @@ public class DireccioController {
     }
 
     @RequestMapping(value={"/adminDireccio/{dir-id}"}, method = RequestMethod.POST)
-    public ModelAndView updateDireccio(@PathVariable("dir-id") int dirId, @Valid Direccio direccio, BindingResult bindingResult){
+    public ModelAndView updateDireccio(@PathVariable("dir-id") int dirId, @Valid Direccio direccio){
         direccio.setId(dirId);
         System.out.println(dirId);
         direccioService.updateDireccio(direccio);

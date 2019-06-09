@@ -16,8 +16,8 @@
         </div>
 
         <div class="row">
-            <div class="card shadow mb-4 col-12">
-                <div class="card-header py-3">
+            <div class="card shadow mb-md-4 col-12">
+                <div class="card-header py-md-3">
                     <h6 class="m-0 font-weight-bold text-primary">Modificar Informació</h6>
                 </div>
                 <div class="card-body">
@@ -53,8 +53,8 @@
                 </div>
 
             </div>
-            <div class="card shadow mb-4 col-12">
-                <div class="card-header py-3">
+            <div class="card shadow mb-md-4 col-12">
+                <div class="card-header py-md-3">
                     <h6 class="m-0 font-weight-bold text-primary">Cambiar contra</h6>
                 </div>
                 <div class="card-body">
@@ -70,6 +70,22 @@
 
                         <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
                     </form>
+
+                </div>
+            </div>
+            <div class="card shadow mb-md-4 col-12">
+                <div class="card-header py-md-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Eliminar</h6>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <h5 class="col-form-label">Eliminar usuari definitivament</h5>
+                        <br>
+                        <div class="col-sm-12 mb-3">
+                            <a type="button" th:href="'delete/'+${auth.id}" class="btn btn-danger btn-user btn-block">Eliminar</a>
+                        </div>
+                    </div>
 
                 </div>
             </div>

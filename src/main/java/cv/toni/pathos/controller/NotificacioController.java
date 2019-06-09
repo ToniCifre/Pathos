@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -31,39 +32,53 @@ public class NotificacioController {
     @Autowired
     private MissatgeService missatgeService;
 
-    @PreAuthorize("hasRole('ORG')")
+    @PreAuthorize("hasAuthority('ORG')")
     @RequestMapping(value={"/notificacions"}, method = RequestMethod.GET)
     public ModelAndView notificationPage(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        User user = userService.getUserAuth();
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "notification");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
 
-        List<Notificacio> notificacions = notificationService.getRecivedNotifications();
+        modelAndView.addObject("fragmentName", "notification");
+
+        List<Notificacio> notificacions;
+        if (auth.getRole().getRole().equals("ORG")) {
+            notificacions= notificationService.getRecivedNotifications(auth);
+        } else if (auth.getRole().getRole().equals("COL")) {
+            notificacions= notificationService.getOrgRecivedNotifications(auth.getOrgId());
+        }else{
+            notificacions= notificationService.getSendedNotifications(auth);
+        }
+
         modelAndView.addObject("listNot", notificacions);
 
         return modelAndView;
     }
 
-    @PreAuthorize("hasRole('ORG')")
+    @PreAuthorize("hasRole('ORG')or hasRole('COL')")
     @RequestMapping(value={"/notificacions/{tipus}"}, method = RequestMethod.GET)
     public ModelAndView notificationPagetype(@PathVariable("tipus") String estat){
+        User auth = userService.getUserAuth();
+        if (auth.getRole().getRole().equals("PER")) {
+            return new ModelAndView("redirect:/notificacions");
+        }
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("home.html");
+
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        User user = userService.getUserAuth();
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "notification");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("fragmentName", "notification");
+
+
 
         NotifyStat nt;
         switch (estat) {
@@ -76,32 +91,62 @@ public class NotificacioController {
             case "recollit":
                 nt = NotifyStat.RECOLLIT;
                 break;
+            case "denegat":
+                nt = NotifyStat.DENEGAT;
+                break;
             default:
                 return new ModelAndView("redirect:/notificacions");
         }
 
-        List<Notificacio> notificacions= notificationService.getRecivedNotificationsByEstat(nt);
+        List<Notificacio> notificacions;
+        if (auth.getRole().getRole().equals("ORG")) {
+            notificacions= notificationService.getRecivedNotificationsByEstat(auth, nt);
+        } else if(nt== NotifyStat.DENEGAT){
+            return new ModelAndView("redirect:/notificacions");
+        }else{
+            notificacions= notificationService.getRecivedNotificationsByEstat(auth.getOrgId(), nt);
+        }
         modelAndView.addObject("listNot", notificacions);
 
         return modelAndView;
     }
 
-    @RequestMapping(value={"/notificacions/enviades"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/notificacions_enviades"}, method = RequestMethod.GET)
     public ModelAndView notificationEnviadesPage(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        User user = userService.getUserAuth();
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "notification");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
 
-        List<Notificacio> notificacions= notificationService.getSendedNotifications();
+        modelAndView.addObject("fragmentName", "notification");
+
+        List<Notificacio> notificacions= notificationService.getSendedNotifications(auth);
         modelAndView.addObject("listNot", notificacions);
 
+        return modelAndView;
+    }
+
+    @RequestMapping(value={"/enviar_notificacio"}, method = RequestMethod.GET)
+    public ModelAndView enviarNotification(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
+        int nMis = missatgeService.getcountMsg();
+        modelAndView.addObject("nMis", nMis);
+        List<Missatge> msnList = missatgeService.find5Missatger();
+        modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("fragmentName", "ListOrg");
+
+        List<User> orgs = userService.findUsersByRol("ORG");
+        modelAndView.addObject("listOrg", orgs);
+
+        modelAndView.setViewName("home");
         return modelAndView;
     }
 
@@ -115,15 +160,16 @@ public class NotificacioController {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
-        user = userService.getUserAuth();
+        modelAndView.setViewName("home.html");
+        User auth = userService.getUserAuth();
+        modelAndView.addObject("auth", auth);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "createNotify");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
+
+        modelAndView.addObject("fragmentName", "createNotify");
+
 
         modelAndView.addObject("notify", new Notificacio());
 
@@ -147,10 +193,10 @@ public class NotificacioController {
 
 
     @RequestMapping(value={"/setEstat/{id}/{estat}"}, method = RequestMethod.GET)
-    public ModelAndView cambirEstatNotify( @PathVariable("id") int id,@PathVariable("estat") String estat){
-
-        notificationService.setEstat(estat, id);
-        return new ModelAndView("redirect:/notificacions");
+    public String cambirEstatNotify( @PathVariable("id") int id,@PathVariable("estat") String estat,  HttpServletRequest request){
+        User user = userService.getUserAuth();
+        notificationService.setEstat(estat, id, user);
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @GetMapping("/delete/notificacio/{id}")

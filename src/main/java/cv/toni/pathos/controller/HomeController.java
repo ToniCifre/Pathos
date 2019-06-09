@@ -27,17 +27,16 @@ public class HomeController {
     @RequestMapping(value={"/","/home"}, method = RequestMethod.GET)
     public ModelAndView home(){
         ModelAndView modelAndView = new ModelAndView();
-
+        modelAndView.setViewName("home.html");
         User user = userService.getUserAuth();
+        modelAndView.addObject("auth", user);
         int nMis = missatgeService.getcountMsg();
         modelAndView.addObject("nMis", nMis);
-        modelAndView.addObject("name", user.getName());
-        modelAndView.addObject("logo", user.getPhoto());
-        modelAndView.addObject("fragmentName", "home");
         List<Missatge> msnList = missatgeService.find5Missatger();
         modelAndView.addObject("msnList", msnList);
 
-        modelAndView.setViewName("home.html");
+        modelAndView.addObject("fragmentName", "home");
+
 
         return modelAndView;
     }

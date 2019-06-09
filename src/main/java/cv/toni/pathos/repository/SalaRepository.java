@@ -15,4 +15,7 @@ public interface SalaRepository extends JpaRepository<Sala, User> {
 
 
     Sala findSalaBySalaId_PersonaId_IdAndSalaId_OrgId_Id(int id, int id2);
+
+    void removeAllBySalaId_OrgId(User u);
+    void removeAllBySalaId_PersonaId(User u);
 }
