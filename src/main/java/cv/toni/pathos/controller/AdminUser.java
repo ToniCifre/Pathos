@@ -74,11 +74,10 @@ public class AdminUser {
                     bindingResult.rejectValue("name", "error.user", "Ja hi ha un usuari amb aquest nom");
                 }
                 if (!bindingResult.hasFieldErrors()) {
-                    user.setOrgId(u);
-                    if (userService.createUser(user, "COL", user.isActive()? 1 : 0) == null) {
+                    if (userService.createColaborador(user, "COL", user.isActive()? 1 : 0) == null) {
                         bindingResult.rejectValue("id", "error.user", "No sha pogut crear El Colaborador");
                     } else {
-                        return new ModelAndView("redirect:/");
+                        return new ModelAndView("redirect:/adminColaborador");
                     }
                 }
             }
@@ -132,7 +131,7 @@ public class AdminUser {
     }
 
     @RequestMapping(value={"/adminUser"}, method = RequestMethod.POST)
-    public ModelAndView adminUserPagepost(@Valid User user){
+    public ModelAndView adminUserPagepost(User user){
         User u = userService.getUserAuth();
         u.setName(user.getName());
         u.setEmail(user.getEmail());
@@ -142,7 +141,7 @@ public class AdminUser {
     }
 
     @RequestMapping(value={"/adminContra"}, method = RequestMethod.POST)
-    public ModelAndView admincontraPage(@Valid User user){
+    public ModelAndView admincontraPage(User user){
         User u = userService.getUserAuth();
         u.setPassword(user.getPassword());
         userService.updatePasword(u);
@@ -163,7 +162,7 @@ public class AdminUser {
         modelAndView.addObject("fragmentName", "AdminCol");
 
 
-        List<User> colList = userService.getColaboradors(auth.getEmail());
+        List<User> colList = userService.getUserAuth().getColaboradors();
         modelAndView.addObject("colList", colList);
 
         return modelAndView;

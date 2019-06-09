@@ -37,7 +37,7 @@ public class Missatge {
     @NotNull
     private boolean senderOrg;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumns({
             @JoinColumn(
                     name = "pers_id",

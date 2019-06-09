@@ -142,7 +142,7 @@ public class MissatgeService {
 
     public List<Missatge> saveMissatges(List<Missatge> m){
         for (Missatge mi : m) {
-           salaRepository.save(mi.getSala());
+           mi.setSala(salaRepository.save(mi.getSala()));
         }
         return missatgeRepository.saveAll(m);
     }

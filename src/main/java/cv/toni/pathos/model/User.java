@@ -50,11 +50,6 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "org_id")
-    private User orgId;
-
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> colaboradors;
 
@@ -119,12 +114,16 @@ public class User {
         this.descripcio = descripcio;
     }
 
-    public User getOrgId() {
-        return orgId;
+    public List<User> getColaboradors() {
+        return colaboradors;
     }
 
-    public void setOrgId(User orgId) {
-        this.orgId = orgId;
+    public void setColaboradors(List<User> colaboradors) {
+        this.colaboradors = colaboradors;
+    }
+
+    public void addColaborador(User colaborador) {
+        this.colaboradors.add(colaborador);
     }
 
     public boolean isActive() {

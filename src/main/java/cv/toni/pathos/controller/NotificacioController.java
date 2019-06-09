@@ -50,7 +50,7 @@ public class NotificacioController {
         if (auth.getRole().getRole().equals("ORG")) {
             notificacions= notificationService.getRecivedNotifications(auth);
         } else if (auth.getRole().getRole().equals("COL")) {
-            notificacions= notificationService.getOrgRecivedNotifications(auth.getOrgId());
+            notificacions= notificationService.getOrgRecivedNotifications(userService.getMuOrg(auth));
         }else{
             notificacions= notificationService.getSendedNotifications(auth);
         }
@@ -104,7 +104,7 @@ public class NotificacioController {
         } else if(nt== NotifyStat.DENEGAT){
             return new ModelAndView("redirect:/notificacions");
         }else{
-            notificacions= notificationService.getRecivedNotificationsByEstat(auth.getOrgId(), nt);
+            notificacions= notificationService.getRecivedNotificationsByEstat(userService.getMuOrg(auth), nt);
         }
         modelAndView.addObject("listNot", notificacions);
 
@@ -173,7 +173,7 @@ public class NotificacioController {
 
         modelAndView.addObject("notify", new Notificacio());
 
-        modelAndView.addObject("listDire", userService.getUserDirection());
+        modelAndView.addObject("listDire", userService.getUserDirection(auth));
 
         modelAndView.addObject("org", orgId);
         modelAndView.setViewName("home");

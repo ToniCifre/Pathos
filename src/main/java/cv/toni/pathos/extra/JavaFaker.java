@@ -66,19 +66,21 @@ public class JavaFaker {
             u.setName(faker.name().firstName());
             u.setRole(org);
             u.setPhoto("user/userDefault.jpg");
+            u.setColaboradors(new ArrayList<>());
+            for (int x = 0; x < 10; x++) {
+                User c = new User();
+                c.setActive(1);
+                c.setEmail(faker.bothify("col???###@gmail.com"));
+                c.setPassword("tonicifre");
+                c.setName(faker.bothify(faker.name().firstName() + "####"));
+                c.setRole(col);
+                c.setPhoto("user/userDefault.jpg");
+                c.setColaboradors(new ArrayList<>());
+                u.addColaborador(c);
+            }
             userList.add(u);
         }
-        for (int i = 0; i < 30; i++) {
-            User u = new User();
-            u.setActive(1);
-            u.setEmail(faker.bothify("col???###@gmail.com"));
-            u.setPassword("tonicifre");
-            u.setName(faker.bothify(faker.name().firstName() + "####"));
-            u.setRole(col);
-            u.setOrgId(userList.get(i % 3));
-            u.setPhoto("user/userDefault.jpg");
-            userList.add(u);
-        }
+
         for (int i = 0; i < 500; i++) {
             User u = new User();
             u.setActive(1);
@@ -87,6 +89,7 @@ public class JavaFaker {
             u.setName(faker.bothify(faker.name().firstName() + "#####?"));
             u.setRole(per);
             u.setPhoto("user/userDefault.jpg");
+            u.setColaboradors(new ArrayList<>());
             userList.add(u);
         }
 

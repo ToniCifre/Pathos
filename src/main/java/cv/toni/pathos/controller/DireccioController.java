@@ -87,7 +87,7 @@ public class DireccioController {
         modelAndView.addObject("msnList", msnList);
         modelAndView.addObject("fragmentName", "adminDireccio");
 
-        List<Direccio> listDirect = direccioService.findDirecciosByUserEmail(auth.getEmail());
+        List<Direccio> listDirect = direccioService.findDirecciosByUser(auth);
         modelAndView.addObject("listDirect", listDirect);
         modelAndView.addObject("direccio", new Direccio());
 
@@ -106,10 +106,6 @@ public class DireccioController {
 
     @GetMapping("/delete/direccio/{id}")
     public ModelAndView deleteUser(@PathVariable("id") int id) {
-       /* User user = userService.findUserByEmail(principal.getName());
-        if(user.getId() != id){
-            return new ModelAndView("redirect:/");
-        }*/
        direccioService.delete(id);
         return new ModelAndView("redirect:/");
     }

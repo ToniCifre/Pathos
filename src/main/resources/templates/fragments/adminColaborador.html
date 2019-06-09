@@ -12,8 +12,11 @@
     <div th:fragment="f-AdminCol" class="container-fluid">
         <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
         <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Colaboradors</h1>
 
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-4 text-gray-800">Colaboradors</h1>
+            <a href="/nouColaborador" class="btn btn-primary btn-user">Afegir</a>
+        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4 py-md-3">
             <div class="card-body">
@@ -40,7 +43,10 @@
                             <td th:text="${col.name}"></td>
                             <td th:text="${col.email}"></td>
                             <td th:text="${col.active}"></td>
-                            <td> <a class="btn btn-primary" th:href="@{/adminColaborador/} + ${col.id}">Editar</a> </td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/adminColaborador/} + ${col.id}">Editar</a>
+                                <a class="btn btn-danger" th:href="@{/delete/} + ${col.id}">Eliminar</a>
+                            </td>
                         </tr>
 
                         </tbody>

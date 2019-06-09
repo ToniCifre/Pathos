@@ -112,11 +112,10 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Perfil:</h6>
                     <a class="collapse-item" href="/adminUser">Perfil</a>
-                    <a class="collapse-item" href="/adminDireccio">Direccions</a>
+                    <a th:if="${auth.role.role}=='ORG' or ${auth.role.role}=='PER'" class="collapse-item" href="/adminDireccio">Direccions</a>
                     <div th:if="${auth.role.role}=='ORG'">
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Colaboradors:</h6>
-                        <a class="collapse-item" href="/nouColaborador">Afegir</a>
                         <a class="collapse-item" href="/adminColaborador">Administrar</a>
                     </div>
                 </div>

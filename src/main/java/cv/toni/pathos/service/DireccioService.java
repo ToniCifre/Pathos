@@ -3,18 +3,13 @@ package cv.toni.pathos.service;
 import cv.toni.pathos.model.Direccio;
 import cv.toni.pathos.model.User;
 import cv.toni.pathos.repository.DireccioRepository;
-import cv.toni.pathos.repository.MissatgeRepository;
 import cv.toni.pathos.repository.NotificacioRepository;
 import cv.toni.pathos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @Service("direccioService")
@@ -34,9 +29,9 @@ public class DireccioService {
         this.userRepository = userRepository;
     }
 
-    public List<Direccio> findDirecciosByUserEmail(String uEmail){ return direccioRepository.findDirecciosByUserEmail(uEmail);}
+    public List<Direccio> findDirecciosByUser(User u){ return direccioRepository.findDirecciosByUser(u);}
 
-    public Direccio findDireccio(int id) {
+    private Direccio findDireccio(int id) {
         try {
             return direccioRepository.findById(id);
         }catch (Exception e){return null;}
@@ -59,10 +54,11 @@ public class DireccioService {
         return direccioRepository.save(direct);
     }
 
+    @Transactional
     public void delete(int id){
         Direccio d = findDireccio(id);
         if(d != null) {
-            notificacioRepository.removeAllByDireccio(d);
+            notificacioRepository.deleteNotificaciosByDireccio(d);
             direccioRepository.delete(d);
         }
     }
