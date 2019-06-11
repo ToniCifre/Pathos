@@ -97,15 +97,17 @@ public class MissatgeService {
         User user = userRepository.findUserByEmail(auth.getName());
 
         SalaId s = new SalaId();
+
         if(user.getRole().getRole().equals("ORG")){
             s.setOrgId(user);
             s.setPersonaId(userRepository.findUserById(receptorId));
+
         }else{
             s.setOrgId(userRepository.findUserById(receptorId));
             s.setPersonaId(user);
         }
 
-        Sala ss = salaRepository.save(new Sala(s));
+        Sala  ss = salaRepository.save(new Sala(s, s.getOrgId(), s.getPersonaId()));
 
         n.setSala(ss);
 

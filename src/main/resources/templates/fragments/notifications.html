@@ -73,7 +73,6 @@
                     <div th:text="${notificacio.descripcio}"></div>
                     <div class="dropdown-divider"></div>
                     <div class="py-1" th:if="${notificacio.recollidor}" th:text="${notificacio.recollidor.name}"></div>
-                    <div class="py-1" th:unless="${notificacio.recollidor}" th:text="'Direcció: '+${notificacio.direccio.dir}+', '+${notificacio.direccio.cp}"></div>
                     <small >
                         <div class="float-right" th:if="${notificacio.isProduct}" th:text="'Caduca el: '+${notificacio.caducitat}"></div>
                         <div class="float-left" th:text="${#temporals.format(notificacio.data, 'dd-MM-yyyy HH:mm')}"></div>

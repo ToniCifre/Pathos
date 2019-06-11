@@ -58,7 +58,6 @@ public class DireccioService {
     public void delete(int id){
         Direccio d = findDireccio(id);
         if(d != null) {
-            notificacioRepository.deleteNotificaciosByDireccio(d);
             direccioRepository.delete(d);
         }
     }

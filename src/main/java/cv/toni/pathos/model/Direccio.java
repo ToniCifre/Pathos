@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -34,9 +35,11 @@ public class Direccio {
     private int cp;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "u_id", nullable = false)
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "direccio")
+    private List<Notificacio> notificacios;
 
     public int getId() {
         return id;
@@ -71,4 +74,12 @@ public class Direccio {
     }
 
     public Direccio getThis(){return this;}
+
+    public List<Notificacio> getNotificacios() {
+        return notificacios;
+    }
+
+    public void setNotificacios(List<Notificacio> notificacios) {
+        this.notificacios = notificacios;
+    }
 }

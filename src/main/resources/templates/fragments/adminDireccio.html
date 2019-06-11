@@ -39,7 +39,10 @@
                                 </div>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <button type="submit" class="btn btn-primary btn-user btn-block">update</button>
+                            <div class="row">
+                                <button type="submit" class="btn btn-primary btn-user btn-block col-6">update</button>
+                                <a th:href="'/delete/direccio/'+${direct.id}" class="btn btn-danger btn-user col-6">Eliminar</a>
+                            </div>
                         </div>
                     </div>
                 </form>

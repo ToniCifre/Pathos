@@ -1,7 +1,5 @@
 package cv.toni.pathos.model;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,6 @@ import java.io.Serializable;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
 public class SalaId implements Serializable {
@@ -29,6 +26,11 @@ public class SalaId implements Serializable {
     @JoinColumn(name = "org_id")
     @NotNull
     private User orgId;
+
+    public SalaId(User user, User user1) {
+        personaId = user;
+        orgId = user1;
+    }
 
 
     public User getPersonaId() {

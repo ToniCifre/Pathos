@@ -40,19 +40,16 @@ public class MissatgeColtroller {
 
         List<User> listContact;
         if (auth.getRole().getRole().equals("ORG")) {
-            List<Sala> salaList = missatgeService.findAllSalas();
+            List<Sala> salaList =auth.getSalas();
             listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
         } else if (auth.getRole().getRole().equals("COL")) {
             listContact= new ArrayList<>();
             listContact.add(userService.getMuOrg(auth));
         }else{
-            List<Sala> salaList = missatgeService.findAllSalas();
-            listContact = salaList.stream().map(sala -> sala.getSalaId().getOrgId()).collect(Collectors.toList());
+            listContact = userService.findUsersByRol("ORG");
         }
 
         modelAndView.addObject("listContact", listContact);
-
-
         return modelAndView;
     }
 
@@ -70,14 +67,13 @@ public class MissatgeColtroller {
 
         List<User> listContact;
         if (auth.getRole().getRole().equals("ORG")) {
-            List<Sala> salaList = missatgeService.findAllSalas();
+            List<Sala> salaList =auth.getSalas();
             listContact = salaList.stream().map(sala -> sala.getSalaId().getPersonaId()).collect(Collectors.toList());
         } else if (auth.getRole().getRole().equals("COL")) {
             listContact= new ArrayList<>();
             listContact.add(userService.getMuOrg(auth));
         }else{
-            List<Sala> salaList = missatgeService.findAllSalas();
-            listContact = salaList.stream().map(sala -> sala.getSalaId().getOrgId()).collect(Collectors.toList());
+            listContact = userService.findUsersByRol("ORG");
         }
         modelAndView.addObject("listContact", listContact);
 

@@ -48,16 +48,6 @@ public class Missatge {
     })
     private Sala sala;
 
-    /*@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, name = "emisor_id")
-    @NotNull
-    private User emisor;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false, name = "receptor_id")
-    @NotNull
-    private User receptor;*/
-
     public int getId() {
         return id;
     }

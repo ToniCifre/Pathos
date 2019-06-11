@@ -43,7 +43,7 @@ public class AdminUser {
         modelAndView.addObject("fragmentName", "nouColaborador");
 
         user = new User();
-        user.setActive(false);
+        user.setIsActive(false);
         modelAndView.addObject("user", user);
 
         return modelAndView;
@@ -51,9 +51,7 @@ public class AdminUser {
 
     @PreAuthorize("hasRole('ORG')")
     @RequestMapping(value={"/nouColaborador"}, method = RequestMethod.POST)
-    public ModelAndView nowColaboradorPage(@Valid User user, BindingResult bindingResult, Principal principal){
-
-        User u = userService.getUserAuth();
+    public ModelAndView nowColaboradorPage(@Valid User user, BindingResult bindingResult){
 
         if(!bindingResult.hasFieldErrors()){
             if (user.getEmail().length() > 50) {
@@ -74,7 +72,7 @@ public class AdminUser {
                     bindingResult.rejectValue("name", "error.user", "Ja hi ha un usuari amb aquest nom");
                 }
                 if (!bindingResult.hasFieldErrors()) {
-                    if (userService.createColaborador(user, "COL", user.isActive()? 1 : 0) == null) {
+                    if (userService.createColaborador(user, "COL", user.isIsActive()? 1 : 0) == null) {
                         bindingResult.rejectValue("id", "error.user", "No sha pogut crear El Colaborador");
                     } else {
                         return new ModelAndView("redirect:/adminColaborador");
@@ -182,7 +180,7 @@ public class AdminUser {
         modelAndView.addObject("fragmentName", "nouColaborador");
 
         User col = userService.findUserById(colId);
-        col.setActive(col.getActive() == 1);
+        col.setIsActive(col.getActive() == 1);
         modelAndView.addObject("user", col);
 
         return modelAndView;
@@ -190,31 +188,12 @@ public class AdminUser {
 
     @RequestMapping(value={"/adminColaborador/{col-id}"}, method = RequestMethod.POST)
     public ModelAndView adminColeditPage(@PathVariable("col-id") int colId, @Valid User user, BindingResult bindingResult) {
-
         User col = userService.findUserById(colId);
         col.setEmail(user.getEmail());
         col.setName(user.getName());
-        col.setActive(user.isActive() ? 1:0);
-        System.out.println(col);
-        if (userService.updateUser(col)==null) {
-            bindingResult.rejectValue("id", "error.user", "El nom o el mail ja existeix");
-        } else {
-            return new ModelAndView("redirect:/adminColaborador");
-        }
+        col.setActive(user.isIsActive() ? 1:0);
+        userService.updateUser(col);
+        return new ModelAndView("redirect:/adminColaborador");
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home.html");
-        User auth = userService.getUserAuth();
-        modelAndView.addObject("auth", auth);
-        int nMis = missatgeService.getcountMsg();
-        modelAndView.addObject("nMis", nMis);
-        List<Missatge> msnList = missatgeService.find5Missatger();
-        modelAndView.addObject("msnList", msnList);
-
-        modelAndView.addObject("fragmentName", "nouColaborador");
-
-        modelAndView.addObject("user", col);
-
-        return modelAndView;
     }
 }

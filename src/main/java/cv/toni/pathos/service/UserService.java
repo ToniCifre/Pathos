@@ -9,9 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service("userService")
@@ -90,10 +90,7 @@ public class UserService {
             Role userRole = roleRepository.findByRole(Role);
             user.setRole(userRole);
 
-            User u = getUserAuth();
-
-            u.addColaborador(u);
-            u.setColaboradors(new ArrayList<>());
+            user.setOrg(getUserAuth());
 
             return userRepository.save(user);
 
@@ -115,33 +112,11 @@ public class UserService {
 
     @Transactional
     public void deleteUser(User user){
-        try {
-            List<Sala> salas;
-            if(user.getRole().getRole().equals("ORG")){
-                salas = salaRepository.findSalasBySalaId_OrgId_Email(user.getEmail());
-                notificacioRepository.deleteAllByReceptor(user);
-                if(!user.getColaboradors().isEmpty()){
-                    userRepository.deleteAll(user.getColaboradors());
-                }
-            }else if(user.getRole().getRole().equals("COL")){
-                salas = salaRepository.findSalasBySalaId_PersonaId_Email(user.getEmail());
-                List<Notificacio> n = notificacioRepository.findAllByRecollidor(user);
-                for (Notificacio nn: n) {
-                    nn.setRecollidor(null);
-                }
-                notificacioRepository.saveAll(n);
-            }else {
-                salas = salaRepository.findSalasBySalaId_PersonaId_Email(user.getEmail());
-                notificacioRepository.deleteAllByEmisor(user);
-            }
-            salaRepository.deleteAll(salas);
-
-        }catch (Exception e){System.out.println("==================ERROR ELIMINST ELL USERS ==============");}
         userRepository.delete(user);
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<User> saveUsers(List<User> users){
         for (User u :users) {
             u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));

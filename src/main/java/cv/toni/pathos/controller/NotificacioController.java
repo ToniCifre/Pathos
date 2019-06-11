@@ -48,11 +48,11 @@ public class NotificacioController {
 
         List<Notificacio> notificacions;
         if (auth.getRole().getRole().equals("ORG")) {
-            notificacions= notificationService.getRecivedNotifications(auth);
+            notificacions= auth.getNotificacionsRebudes();
         } else if (auth.getRole().getRole().equals("COL")) {
-            notificacions= notificationService.getOrgRecivedNotifications(userService.getMuOrg(auth));
+            notificacions= auth.getOrg().getNotificacionsRebudes();
         }else{
-            notificacions= notificationService.getSendedNotifications(auth);
+            notificacions= auth.getNotificacionsEnviades();
         }
 
         modelAndView.addObject("listNot", notificacions);

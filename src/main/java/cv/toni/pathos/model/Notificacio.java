@@ -45,20 +45,19 @@ public class Notificacio {
     @Column(name = "estat", nullable = false, length = 10)
     private NotifyStat estat;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "emisor_id")
     private User emisor;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "receptor_id")
     private User receptor;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "recollidor")
     private User recollidor;
 
-    @ManyToOne()
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "direccio_id")
     private Direccio direccio;
 
